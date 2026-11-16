@@ -1,0 +1,103 @@
+{
+  "name": "dental",
+  "welcome": "Hi, this is Sam from Green Leaf Dental. How can I help?",
+  "welcome_instruction": "Greet the caller as Sam from Green Leaf Dental and ask how you can help.",
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "check_slots",
+        "description": "Look up free appointment slots.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string",
+              "description": "the day to check, as YYYY-MM-DD"
+            },
+            "treatment": {
+              "type": "string",
+              "enum": [
+                "cleaning",
+                "filling",
+                "checkup"
+              ],
+              "description": "the kind of visit"
+            }
+          },
+          "required": [
+            "date"
+          ]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "book_visit",
+        "description": "Book a visit.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "patient_name": {
+              "type": "string",
+              "description": "the patient's full name"
+            },
+            "date": {
+              "type": "string",
+              "description": "YYYY-MM-DD"
+            },
+            "time": {
+              "type": "string",
+              "description": "HH:MM, 24 hour"
+            },
+            "phone": {
+              "type": "string",
+              "description": "contact number if the caller gives one"
+            }
+          },
+          "required": [
+            "patient_name",
+            "date",
+            "time"
+          ]
+        }
+      }
+    }
+  ],
+  "mock": {
+    "tools": {
+      "book_visit": {
+        "status": "booked",
+        "confirmation": "GL-1042"
+      },
+      "check_slots": {
+        "date": "2026-11-18",
+        "slots": [
+          "09:00",
+          "11:30",
+          "15:00"
+        ]
+      }
+    },
+    "formats": {
+      "check_slots": {
+        "date": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "book_visit": {
+        "date": "^\\d{4}-\\d{2}-\\d{2}$",
+        "time": "^\\d{2}:\\d{2}$"
+      }
+    }
+  },
+  "source_stack": {
+    "stt": "deepgram.STT(model='nova-3')",
+    "llm": "openai.LLM(model='gpt-4.1-mini')",
+    "tts": "elevenlabs.TTS(voice_id='abc')"
+  },
+  "case_vars": {
+    "task": "You are Sam, the phone assistant for Green Leaf Dental",
+    "lookup_tool": "check_slots",
+    "book_tool": "book_visit"
+  }
+}

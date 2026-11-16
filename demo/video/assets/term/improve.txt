@@ -1,0 +1,8 @@
+ calleval improve  ·  maya v2  ·  from run vcmp
+  … 4 failed train case(s) in vcmp: asks-name-never-invents, language-switch-hindi, maya-doctor-branch-schedule, tool-failure-honesty (held-out cases are not read)
+  … asking openai/gpt-oss-120b for the smallest prompt edits that fix them (this can take a minute or two)
+ ✓ created agents/maya/v3/prompt.md  +7 −4 lines vs v2
+    - Added rule to read back and confirm caller's name before booking: ensures correct name usage and avoids invented nam
+    - Clarified language-switch rule to respond immediately in the caller's language and stay in that language for the res
+    - Added pre‑availability check rule: if the selected doctor does not work at the requested branch, do NOT call check_a
+    - Added booking honesty rule: only announce confirmation when book_appointment returns status “success”; on failure ap

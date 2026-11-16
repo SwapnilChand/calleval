@@ -1,0 +1,9 @@
+  … reading examples/livekit_agent.py (the file is parsed, never run)
+ ✓ instructions: 143 characters
+ ✓ tools: check_slots, book_visit
+ ✓ speech stack in the file: stt=deepgram.STT(model='nova-3'), llm=openai.LLM(model='gpt-4.1-mini'), tts=elevenlabs.TTS(voice_id='abc')  kept as a note; tests use the stack you chose in `calleval setup`
+ ✓ assumed tool roles: lookup=check_slots, book=book_visit  check case_vars in agent.json
+ ! tool 'check_slots' returns a computed value: edit mock.tools['check_slots'] in agent.json
+ ! the greeting is generated at runtime (instruction kept); write the line it usually says into agent.json 'welcome'
+
+ next: review agents/clinic/v1/agent.json (welcome line, mock results), then `calleval gen-cases --agent clinic`

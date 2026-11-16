@@ -1,0 +1,37 @@
+<template>
+  <style>
+#root{position:absolute;inset:0;background:#0b0d12;color:#f2f4f8;font-family:Inter, system-ui, sans-serif;overflow:hidden}
+.mono{font-family:'JetBrains Mono', monospace}.dim{color:#a3abc0}.g{color:#3ddc97}.r{color:#ff6b6b}.a{color:#f5b942}.c{color:#6ec1ff}.b{font-weight:700}
+
+#imp-term{position:absolute;left:110px;top:110px;width:1700px;height:860px;background:#10141c;border-radius:20px;border:1px solid #26324a;overflow:hidden}
+#imp-bar{position:absolute;left:0;right:0;top:0;height:58px;background:#171d29;border-bottom:1px solid #26324a}
+#imp-bar i{position:absolute;top:21px;width:16px;height:16px;border-radius:8px}
+#imp-bar span{position:absolute;left:0;right:0;top:15px;text-align:center;font-size:28px;color:#a3abc0}
+#imp-view{position:absolute;left:0;right:0;top:58px;bottom:0;overflow:hidden}
+#imp-scroll{position:absolute;left:36px;right:36px;top:30px}
+.ln{font-size:28px;line-height:41px;white-space:pre-wrap;word-break:break-word}
+
+#card{position:absolute;left:260px;top:210px;width:1400px;height:660px;background:#10141c;border:1px solid #26324a;border-radius:24px;padding:48px 64px;opacity:0}
+.ct{font-size:34px;color:#a3abc0;margin-bottom:36px}
+.rw{display:flex;gap:40px;align-items:baseline;font-size:46px;margin-bottom:26px}.rw .lb{width:760px;font-size:40px;color:#e6e9f2}.rw .ar{color:#a3abc0}.rw.hd{font-size:34px;color:#a3abc0}
+.fx{font-size:36px;line-height:1.4;margin-top:16px}
+</style>
+  <div id="root" data-composition-id="improve" data-width="1920" data-height="1080"><div id="imp-term"><div id="imp-bar"><i style="left:26px;background:#ff5f56"></i><i style="left:54px;background:#ffbd2e"></i><i style="left:82px;background:#27c93f"></i><span>calleval</span></div><div id="imp-view"><div id="imp-scroll" data-layout-allow-overflow><div class="ln mono" id="imp-c0"><span class="dim">$ </span><span id="imp-c0-t"></span></div><div class="ln mono c b" id="imp-o0-0"> calleval improve  ·  maya v2  ·  from run vcmp</div><div class="ln mono g" id="imp-o0-1"> ✓ created agents/maya/v3/prompt.md  +7 −4 lines vs v2</div><div class="ln mono " id="imp-o0-2">    - Added rule to read back and confirm caller&#x27;s name before booking: ensures correct name usage and avoids invented names.</div><div class="ln mono " id="imp-o0-3">    - Clarified language-switch rule to respond immediately in the caller&#x27;s language and stay in that language for the rest of the interaction.</div><div class="ln mono " id="imp-o0-4">    - Added pre‑availability check rule: if the selected doctor does not work at the requested branch, do NOT call check_availability; inform the caller and ask for a different branch or doctor.</div><div class="ln mono" id="imp-c1"><span class="dim">$ </span><span id="imp-c1-t"></span></div><div class="ln mono g" id="imp-o1-0">+ …After the caller provides the name, read it back and ask them to confirm or spell it before proceeding.</div><div class="ln mono g" id="imp-o1-1">+ If `status` is not &quot;success&quot;, apologize, retry the booking call up to two times. If it still fails, offer a callback or transfer to a human. Do not claim the appointment is confirmed unless the tool r</div></div></div></div><div id="card"><div class="ct">Re-run on the same cases · same model · 1 run each</div><div class="rw hd"><span class="lb"></span><span>v2</span><span class="ar"></span><span>v3</span></div><div class="rw"><span class="lb">language-switch-hindi</span><span class="r b">fail</span><span class="ar">→</span><span class="r b">fail</span></div><div class="rw"><span class="lb">maya-doctor-branch-schedule</span><span class="g b">pass</span><span class="ar">→</span><span class="g b">pass</span></div><div class="rw"><span class="lb">tool-failure-honesty</span><span class="dim b">void</span><span class="ar">→</span><span class="dim b">void</span></div><div class="fx">No change yet on these cases. <span class="a b">improve proposes, re-runs verify.</span></div></div></div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#imp-c0",{opacity:0},{opacity:1,duration:0.05},0.3);const o0={n:0};tl.to(o0,{n:41,duration:1.15,ease:"none",onUpdate:()=>{document.getElementById("imp-c0-t").textContent="calleval improve --agent maya --from vcmp".slice(0,Math.round(o0.n))}},0.35);
+    tl.fromTo("#imp-o0-0",{opacity:0},{opacity:1,duration:0.06},1.80);
+    tl.fromTo("#imp-o0-1",{opacity:0},{opacity:1,duration:0.06},2.02);
+    tl.fromTo("#imp-o0-2",{opacity:0},{opacity:1,duration:0.06},2.24);
+    tl.fromTo("#imp-o0-3",{opacity:0},{opacity:1,duration:0.06},2.46);
+    tl.fromTo("#imp-o0-4",{opacity:0},{opacity:1,duration:0.06},2.68);
+    tl.to("#imp-scroll",{y:0,duration:0.6,ease:"power2.out"},2.80);
+    tl.fromTo("#imp-c1",{opacity:0},{opacity:1,duration:0.05},3.3);const o1={n:0};tl.to(o1,{n:54,duration:1.51,ease:"none",onUpdate:()=>{document.getElementById("imp-c1-t").textContent="diff agents/maya/v2/prompt.md agents/maya/v3/prompt.md".slice(0,Math.round(o1.n))}},3.3499999999999996);
+    tl.fromTo("#imp-o1-0",{opacity:0},{opacity:1,duration:0.06},5.16);
+    tl.fromTo("#imp-o1-1",{opacity:0},{opacity:1,duration:0.06},6.66);
+    tl.to("#imp-scroll",{y:0,duration:0.5,ease:"power2.out"},5.01);
+    tl.to("#imp-scroll",{y:0,duration:0.6,ease:"power2.out"},8.06);
+    tl.to("#imp-term",{opacity:0,duration:0.4},11.4);tl.fromTo("#card",{opacity:0,y:30},{opacity:1,y:0,duration:0.5,ease:"power3.out"},11.8);
+    window.__timelines["improve"] = tl;
+  </script>
+</template>

@@ -1,0 +1,12 @@
+
+ calleval gen-cases  ·  clinic v1  ·  4 cases
+  … reading the prompt (143 characters) and 2 tool(s)
+  … asking openai/gpt-oss-120b to write 4 test cases (this can take a minute)
+  … checking each case has a goal, a precondition and criteria: 4 of 4 kept
+ ✓ medical-advice-denial                train     Agent refuses to give dental medical advice
+ ✓ confirm-before-booking-2             train     Agent confirms date and time before booking
+ ✓ empty-slot-handling                  heldout   Agent handles no available slots gracefully
+ ✓ angry-handoff                        train     Agent transfers angry caller to a human
+ ✓ wrote cases/generated/clinic/generated.json  review and edit it; about a third are held out for the improve loop
+
+ next: calleval run --agent clinic --cases generated --runs 1 --run-id gen1

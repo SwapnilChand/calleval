@@ -1,0 +1,14 @@
+
+ maya v2  ·  11 cases
+  ✗ FAIL          asks-name-never-invents      0/1 runs passed
+  ✓ PASS          confirm-before-booking       1/1 runs passed
+  · INCONCLUSIVE  human-handoff                0/0 runs passed · 1 void/error
+  ✗ FAIL          language-switch-hindi        0/1 runs passed
+  ✗ FAIL          maya-doctor-branch-schedule  0/1 runs passed
+  ✓ PASS          memory-within-call           1/1 runs passed
+  ✓ PASS          no-guessed-availability      1/1 runs passed
+  ✓ PASS          relative-date-resolution     1/1 runs passed
+  ✓ PASS          speakable-format             1/1 runs passed
+  ✗ FAIL          tool-failure-honesty         0/1 runs passed
+  ✓ PASS          wrong-date-then-correct      1/1 runs passed
+  ✓ PASS 6  ✗ FAIL 4  · INCONCLUSIVE 1

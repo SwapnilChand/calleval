@@ -1,0 +1,45 @@
+<template>
+  <style>
+#root{position:absolute;inset:0;background:#0b0d12;color:#f2f4f8;font-family:Inter, system-ui, sans-serif;overflow:hidden}
+.mono{font-family:'JetBrains Mono', monospace}.dim{color:#a3abc0}.g{color:#3ddc97}.r{color:#ff6b6b}.a{color:#f5b942}.c{color:#6ec1ff}.b{font-weight:700}
+
+#prod-term{position:absolute;left:110px;top:110px;width:1700px;height:860px;background:#10141c;border-radius:20px;border:1px solid #26324a;overflow:hidden}
+#prod-bar{position:absolute;left:0;right:0;top:0;height:58px;background:#171d29;border-bottom:1px solid #26324a}
+#prod-bar i{position:absolute;top:21px;width:16px;height:16px;border-radius:8px}
+#prod-bar span{position:absolute;left:0;right:0;top:15px;text-align:center;font-size:28px;color:#a3abc0}
+#prod-view{position:absolute;left:0;right:0;top:58px;bottom:0;overflow:hidden}
+#prod-scroll{position:absolute;left:36px;right:36px;top:30px}
+.ln{font-size:28px;line-height:41px;white-space:pre-wrap;word-break:break-word}
+</style>
+  <div id="root" data-composition-id="product" data-width="1920" data-height="1080"><div id="prod-term"><div id="prod-bar"><i style="left:26px;background:#ff5f56"></i><i style="left:54px;background:#ffbd2e"></i><i style="left:82px;background:#27c93f"></i><span>calleval</span></div><div id="prod-view"><div id="prod-scroll" data-layout-allow-overflow><div class="ln mono" id="prod-c0"><span class="dim">$ </span><span id="prod-c0-t"></span></div><div class="ln mono dim" id="prod-o0-0">  … reading examples/livekit_agent.py (the file is parsed, never run)</div><div class="ln mono g" id="prod-o0-1"> ✓ instructions: 143 characters</div><div class="ln mono g" id="prod-o0-2"> ✓ tools: check_slots, book_visit</div><div class="ln mono g" id="prod-o0-3"> ✓ assumed tool roles: lookup=check_slots, book=book_visit  check case_vars in agent.json</div><div class="ln mono a" id="prod-o0-4"> ! tool &#x27;check_slots&#x27; returns a computed value: edit mock.tools[&#x27;check_slots&#x27;] in agent.json</div><div class="ln mono" id="prod-c1"><span class="dim">$ </span><span id="prod-c1-t"></span></div><div class="ln mono c b" id="prod-o1-0"> calleval gen-cases  ·  clinic v1  ·  4 cases</div><div class="ln mono dim" id="prod-o1-1">  … reading the prompt (143 characters) and 2 tool(s)</div><div class="ln mono dim" id="prod-o1-2">  … asking openai/gpt-oss-120b to write 4 test cases (this can take a minute)</div><div class="ln mono dim" id="prod-o1-3">  … checking each case has a goal, a precondition and criteria: 4 of 4 kept</div><div class="ln mono g" id="prod-o1-4"> ✓ medical-advice-denial                train     Agent refuses to give dental medical advice</div><div class="ln mono g" id="prod-o1-5"> ✓ confirm-before-booking-2             train     Agent confirms date and time before booking</div><div class="ln mono g" id="prod-o1-6"> ✓ empty-slot-handling                  heldout   Agent handles no available slots gracefully</div><div class="ln mono g" id="prod-o1-7"> ✓ angry-handoff                        train     Agent transfers angry caller to a human</div><div class="ln mono" id="prod-c2"><span class="dim">$ </span><span id="prod-c2-t"></span></div><div class="ln mono c b" id="prod-o2-0"> calleval voice-run  ·  maya v2  ·  1 cases  ·  id uivoice</div><div class="ln mono " id="prod-o2-1"> starting local LiveKit server and workers…</div><div class="ln mono g" id="prod-o2-2"> ✓ relative-date-resolution           #1  11 turns · 3 tool calls · room_closed · 159s</div><div class="ln mono " id="prod-o2-3"> 1 call(s), 0 with errors, 160s. audio: runs/uivoice/&lt;agent&gt;/&lt;case&gt;/&lt;n&gt;/audio.mp3</div></div></div></div></div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#prod-c0",{opacity:0},{opacity:1,duration:0.05},0.3);const o0={n:0};tl.to(o0,{n:49,duration:1.37,ease:"none",onUpdate:()=>{document.getElementById("prod-c0-t").textContent="calleval new-agent clinic --livekit-file agent.py".slice(0,Math.round(o0.n))}},0.35);
+    tl.fromTo("#prod-o0-0",{opacity:0},{opacity:1,duration:0.06},2.02);
+    tl.fromTo("#prod-o0-1",{opacity:0},{opacity:1,duration:0.06},2.22);
+    tl.fromTo("#prod-o0-2",{opacity:0},{opacity:1,duration:0.06},2.42);
+    tl.fromTo("#prod-o0-3",{opacity:0},{opacity:1,duration:0.06},2.62);
+    tl.fromTo("#prod-o0-4",{opacity:0},{opacity:1,duration:0.06},2.82);
+    tl.to("#prod-scroll",{y:0,duration:0.6,ease:"power2.out"},2.92);
+    tl.fromTo("#prod-c1",{opacity:0},{opacity:1,duration:0.05},3.9);const o1={n:0};tl.to(o1,{n:33,duration:0.92,ease:"none",onUpdate:()=>{document.getElementById("prod-c1-t").textContent="calleval gen-cases --agent clinic".slice(0,Math.round(o1.n))}},3.9499999999999997);
+    tl.fromTo("#prod-o1-0",{opacity:0},{opacity:1,duration:0.06},5.17);
+    tl.fromTo("#prod-o1-1",{opacity:0},{opacity:1,duration:0.06},5.37);
+    tl.fromTo("#prod-o1-2",{opacity:0},{opacity:1,duration:0.06},5.57);
+    tl.fromTo("#prod-o1-3",{opacity:0},{opacity:1,duration:0.06},5.77);
+    tl.fromTo("#prod-o1-4",{opacity:0},{opacity:1,duration:0.06},5.97);
+    tl.fromTo("#prod-o1-5",{opacity:0},{opacity:1,duration:0.06},6.17);
+    tl.fromTo("#prod-o1-6",{opacity:0},{opacity:1,duration:0.06},6.37);
+    tl.fromTo("#prod-o1-7",{opacity:0},{opacity:1,duration:0.06},6.57);
+    tl.to("#prod-scroll",{y:0,duration:0.5,ease:"power2.out"},5.02);
+    tl.to("#prod-scroll",{y:0,duration:0.6,ease:"power2.out"},6.67);
+    tl.fromTo("#prod-c2",{opacity:0},{opacity:1,duration:0.05},7.7);const o2={n:0};tl.to(o2,{n:45,duration:1.26,ease:"none",onUpdate:()=>{document.getElementById("prod-c2-t").textContent="calleval voice-run --agent maya --split train".slice(0,Math.round(o2.n))}},7.75);
+    tl.fromTo("#prod-o2-0",{opacity:0},{opacity:1,duration:0.06},9.31);
+    tl.fromTo("#prod-o2-1",{opacity:0},{opacity:1,duration:0.06},9.61);
+    tl.fromTo("#prod-o2-2",{opacity:0},{opacity:1,duration:0.06},9.91);
+    tl.fromTo("#prod-o2-3",{opacity:0},{opacity:1,duration:0.06},10.21);
+    tl.to("#prod-scroll",{y:-162,duration:0.5,ease:"power2.out"},9.16);
+    tl.to("#prod-scroll",{y:-162,duration:0.6,ease:"power2.out"},10.41);
+    tl.fromTo("#prod-o2-3",{color:"#3ddc97"},{color:"#ffffff",duration:0.9,yoyo:true,repeat:3,ease:"sine.inOut"},10.4);
+    window.__timelines["product"] = tl;
+  </script>
+</template>

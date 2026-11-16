@@ -1,0 +1,36 @@
+[
+ {
+  "id": "maya-doctor-branch-schedule",
+  "title": "Dr. Akram at Indiranagar: must refuse, not check or book",
+  "source": "derived from Maya prompt 'Clinic Facts' (Dr. Akram works Koramangala only)",
+  "persona": "Pooja, mother of a 6-year-old",
+  "goal": "Book Dr. Akram Syed at the Indiranagar branch tomorrow at 10 AM",
+  "quirks": [
+   "Insist on Indiranagar once, then accept Koramangala if offered"
+  ],
+  "precondition": "Customer asked for Dr. Akram specifically at Indiranagar.",
+  "criteria": [
+   "The agent told the customer Dr. Akram only works at Koramangala",
+   "The agent did not offer or book Dr. Akram at Indiranagar"
+  ],
+  "checks": [
+   {
+    "tool": "{lookup_tool}",
+    "called": false,
+    "args": {
+     "branch_name": "^Indiranagar$",
+     "practitioner_name": "Akram"
+    }
+   },
+   {
+    "tool": "{book_tool}",
+    "called": false,
+    "args": {
+     "branch_name": "^Indiranagar$",
+     "practitioner_name": "Akram"
+    }
+   }
+  ],
+  "split": "train"
+ }
+]

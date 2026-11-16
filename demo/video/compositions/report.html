@@ -1,0 +1,26 @@
+<template>
+  <style>
+#root{position:absolute;inset:0;background:#0b0d12;color:#f2f4f8;font-family:Inter, system-ui, sans-serif;overflow:hidden}
+.mono{font-family:'JetBrains Mono', monospace}.dim{color:#a3abc0}.g{color:#3ddc97}.r{color:#ff6b6b}.a{color:#f5b942}.c{color:#6ec1ff}.b{font-weight:700}
+</style>
+  <div id="root" data-composition-id="report" data-width="1920" data-height="1080">
+<img id="rt" src="assets/report_table.png" style="position:absolute;left:210px;top:120px;width:1500px;height:819px;border-radius:14px;border:1px solid #26324a"/>
+<div id="rt-cap" style="position:absolute;left:0;right:0;top:960px;text-align:center;font-size:48px;font-weight:700"><span class="g">6 pass</span> <span class="dim">·</span> <span class="r">4 fail</span> <span class="dim">·</span> <span class="dim">1 inconclusive</span></div>
+<img id="rv" src="assets/report_verdict.png" style="position:absolute;left:210px;top:330px;width:1500px;height:383px;border-radius:14px;border:1px solid #26324a"/>
+<div id="rv-a" style="position:absolute;left:0;right:0;top:170px;text-align:center;font-size:56px;font-weight:700">Every failure comes with the <span class="r">quoted evidence</span></div>
+<div id="rv-b" style="position:absolute;left:0;right:0;top:790px;text-align:center;font-size:56px;font-weight:700">and a <span class="a">suggested fix</span></div>
+</div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+tl.fromTo("#rt",{opacity:0,y:40},{opacity:1,y:0,duration:0.5,ease:"power3.out"},0.3);
+tl.fromTo("#rt-cap",{opacity:0},{opacity:1,duration:0.4},1.4);
+tl.to("#rt",{opacity:0,y:-30,duration:0.35,ease:"power2.in"},4.6);
+tl.to("#rt-cap",{opacity:0,duration:0.3},4.5);
+tl.fromTo("#rv",{opacity:0,y:40},{opacity:1,y:0,duration:0.5,ease:"power3.out"},5.0);
+tl.fromTo("#rv-a",{opacity:0,y:20},{opacity:1,y:0,duration:0.4},5.3);
+tl.fromTo("#rv-b",{opacity:0,y:20},{opacity:1,y:0,duration:0.4},7.4);
+tl.set("#rv",{opacity:0},-1);
+    window.__timelines["report"] = tl;
+  </script>
+</template>

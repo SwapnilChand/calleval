@@ -1,0 +1,41 @@
+<template>
+  <style>
+#root{position:absolute;inset:0;background:#0b0d12;color:#f2f4f8;font-family:Inter, system-ui, sans-serif;overflow:hidden}
+.mono{font-family:'JetBrains Mono', monospace}.dim{color:#a3abc0}.g{color:#3ddc97}.r{color:#ff6b6b}.a{color:#f5b942}.c{color:#6ec1ff}.b{font-weight:700}
+
+.win{position:absolute;left:210px;top:90px;width:1500px;height:900px;background:#10141c;border:1px solid #26324a;border-radius:22px;overflow:hidden}
+.top{position:absolute;left:0;right:0;top:0;height:84px;background:#171d29;border-bottom:1px solid #26324a;font-size:30px;line-height:84px;padding-left:36px}
+.top b{color:#3ddc97}.rec{position:absolute;right:36px;top:0;font-size:30px;color:#ff6b6b}
+.bub{position:absolute;max-width:900px;font-size:36px;line-height:1.3;padding:22px 30px;border-radius:26px}
+.ag{left:36px;background:#1d2535;border:1px solid #2b3855;border-bottom-left-radius:6px}
+.cu{right:36px;background:#1e4a8a;border-bottom-right-radius:6px}
+.who{display:block;font-size:28px;color:#a3abc0;margin-bottom:6px}
+.chip{position:absolute;font-size:30px;padding:16px 26px;border-radius:14px;background:#2a1618;border:2px solid #ff6b6b;color:#ff9a9a;line-height:1.3}
+.cap{position:absolute;left:0;right:0;bottom:46px;text-align:center;font-size:44px;font-weight:700}
+</style>
+  <div id="root" data-composition-id="call" data-width="1920" data-height="1080">
+<div class="win">
+  <div class="top"><b>●</b> Real audio call &nbsp;·&nbsp; agent under test ⇄ simulated customer <span class="rec">recorded locally</span></div>
+  <div style="position:absolute;left:0;top:84px;height:6px;width:1500px;background:#1d2535"><div id="prog" style="height:6px;width:0;background:#3ddc97"></div></div>
+  <div id="a1" class="bub ag" style="top:130px"><span class="who">Maya (agent)</span>Could you please confirm your full name for the booking?</div>
+  <div id="c1" class="bub cu" style="top:310px"><span class="who">Customer</span>Neha Kapoor.</div>
+  <div id="stt" class="chip" style="left:36px;top:480px"><span class="who" style="color:#ff9a9a">what the agent's speech-to-text wrote</span>“Ne Kippur.”</div>
+  <div id="tool" class="chip mono" style="right:36px;top:480px;font-size:28px">book_appointment(<br>&nbsp;&nbsp;patient_name = “Ne Kippur”)</div>
+  <div id="a2" class="bub ag" style="top:660px"><span class="who">Maya (agent)</span>Your appointment is successfully booked.</div>
+  <div id="cap" class="cap" style="color:#ff6b6b">Booked under the wrong name. The agent never read it back.</div>
+</div></div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+tl.fromTo("#a1",{opacity:0,y:24},{opacity:1,y:0,duration:0.35,ease:"power3.out"},0.6);
+tl.fromTo("#c1",{opacity:0,y:24},{opacity:1,y:0,duration:0.35,ease:"power3.out"},5.0);
+tl.fromTo("#stt",{opacity:0,scale:0.92},{opacity:1,scale:1,duration:0.3,ease:"back.out(2)"},6.4);
+tl.fromTo("#tool",{opacity:0,scale:0.92},{opacity:1,scale:1,duration:0.3,ease:"back.out(2)"},7.0);
+tl.fromTo("#a2",{opacity:0,y:24},{opacity:1,y:0,duration:0.35,ease:"power3.out"},7.4);
+tl.fromTo("#prog",{width:0},{width:1500,duration:11.3,ease:"none"},0.5);
+tl.fromTo("#stt",{boxShadow:"0 0 0 0 rgba(255,107,107,0)"},{boxShadow:"0 0 40px 6px rgba(255,107,107,0.55)",duration:0.8,yoyo:true,repeat:3,ease:"sine.inOut"},12.4);
+tl.fromTo("#tool",{boxShadow:"0 0 0 0 rgba(255,107,107,0)"},{boxShadow:"0 0 40px 6px rgba(255,107,107,0.55)",duration:0.8,yoyo:true,repeat:3,ease:"sine.inOut"},12.4);
+tl.fromTo("#cap",{opacity:0,y:20},{opacity:1,y:0,duration:0.4,ease:"power3.out"},11.8);
+    window.__timelines["call"] = tl;
+  </script>
+</template>

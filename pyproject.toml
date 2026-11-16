@@ -1,0 +1,22 @@
+[project]
+name = "calleval"
+version = "0.1.0"
+description = "Test a voice agent with simulated customers and an LLM judge: text or real-audio calls, local-first."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+dependencies = []          # text runs are stdlib only
+
+[project.optional-dependencies]
+# real-audio runs (installed for you by `calleval setup --install voice`)
+voice = ["livekit-agents", "livekit-plugins-openai", "livekit-plugins-silero", "piper-tts", "faster-whisper"]
+
+[project.scripts]
+calleval = "calleval.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["calleval", "calleval.voice"]

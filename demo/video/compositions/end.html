@@ -1,0 +1,22 @@
+<template>
+  <style>
+#root{position:absolute;inset:0;background:#0b0d12;color:#f2f4f8;font-family:Inter, system-ui, sans-serif;overflow:hidden}
+.mono{font-family:'JetBrains Mono', monospace}.dim{color:#a3abc0}.g{color:#3ddc97}.r{color:#ff6b6b}.a{color:#f5b942}.c{color:#6ec1ff}.b{font-weight:700}
+</style>
+  <div id="root" data-composition-id="end" data-width="1920" data-height="1080">
+<div id="e1" style="position:absolute;left:0;right:0;top:300px;text-align:center;font-size:150px;font-weight:700;letter-spacing:-0.04em">calleval</div>
+<div id="e2" style="position:absolute;left:0;right:0;top:500px;text-align:center;font-size:52px;color:#a3abc0">Test your voice agent before your customers do.</div>
+<div id="e3" class="mono" style="position:absolute;left:0;right:0;top:640px;text-align:center;font-size:44px;color:#3ddc97">github.com/SwapnilChand/calleval</div>
+<div id="e4" style="position:absolute;left:0;right:0;top:730px;text-align:center;font-size:34px;color:#a3abc0">open source · MIT · runs on your machine · keys optional</div>
+</div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+tl.set("#e1",{opacity:1},0);
+tl.fromTo("#e2",{opacity:0,y:16},{opacity:1,y:0,duration:0.45,ease:"power3.out"},0.6);
+tl.fromTo("#e3",{opacity:0,y:16},{opacity:1,y:0,duration:0.45,ease:"power3.out"},1.4);
+tl.fromTo("#e4",{opacity:0,y:16},{opacity:1,y:0,duration:0.45,ease:"power3.out"},2.1);
+tl.to("#e1",{scale:1.04,duration:3.5,ease:"sine.inOut"},0.5);
+    window.__timelines["end"] = tl;
+  </script>
+</template>

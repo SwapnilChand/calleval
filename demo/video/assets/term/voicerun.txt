@@ -1,0 +1,6 @@
+ calleval voice-run  ·  maya v2  ·  1 cases  ·  id uivoice
+ speech-to-text: groq · text-to-speech: piper · agent: gemini-3.5-flash-lite (hosted) · persona: gemini-3.5-flash-lite (hosted)
+ starting local LiveKit server and workers…
+ ✓ relative-date-resolution           #1  11 turns · 3 tool calls · room_closed · 159s
+ 1 call(s), 0 with errors, 160s. audio: runs/uivoice/<agent>/<case>/<n>/audio.mp3
+ next: calleval judge uivoice   (then: calleval report uivoice)

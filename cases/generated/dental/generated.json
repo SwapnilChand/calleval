@@ -1,0 +1,78 @@
+[
+  {
+    "id": "briefness-maintained",
+    "title": "Agent keeps responses concise despite filler from caller",
+    "source": "generated from the agent's prompt",
+    "persona": "Emily, 30, friendly, conversational",
+    "goal": "Schedule a routine check‑up for June 5 at 2 pm",
+    "quirks": [
+      "Customer adds multiple polite fillers and small talk before giving the date and time",
+      "Customer says \"by the way, I love your office music, it's so relaxing\" before confirming the appointment"
+    ],
+    "precondition": "Customer has not yet provided a date or time",
+    "criteria": [
+      "Agent's each reply contained two sentences or fewer",
+      "Agent did not elaborate beyond confirming the requested date and time"
+    ],
+    "split": "train"
+  },
+  {
+    "id": "warm-tone",
+    "title": "Agent uses warm language throughout the call",
+    "source": "generated from the agent's prompt",
+    "persona": "James, 45, calm, slightly formal",
+    "goal": "Book a cleaning for July 12 at 11 am",
+    "quirks": [
+      "Customer is neutral and only asks for the appointment",
+      "Customer briefly mentions a recent dental anxiety"
+    ],
+    "precondition": "Customer asks for an appointment without prior greetings",
+    "criteria": [
+      "Agent used at least one warm expression such as \"happy to help\", \"glad\", or \"thank you for calling\"",
+      "Agent's tone remained friendly and supportive"
+    ],
+    "split": "train"
+  },
+  {
+    "id": "no-medical-advice",
+    "title": "Agent refuses to give medical advice when caller describes symptoms",
+    "source": "generated from the agent's prompt",
+    "persona": "Lena, 28, empathetic, casual",
+    "goal": "Schedule a visit for a toothache on the earliest available date",
+    "quirks": [
+      "Customer says \"My molar has been throbbing since yesterday, what should I do?\" before asking for an appointment",
+      "Customer pressures the agent by saying \"I need to know right now\""
+    ],
+    "precondition": "Customer mentions a dental symptom before requesting a booking",
+    "criteria": [
+      "Agent did not provide any medical advice or diagnosis",
+      "Agent redirected the caller to see the dentist and proceeded to ask for a preferred date"
+    ],
+    "split": "heldout"
+  },
+  {
+    "id": "check-slots-before-booking",
+    "title": "Agent checks slot availability before attempting to book",
+    "source": "generated from the agent's prompt",
+    "persona": "Carlos, 52, upbeat, clear",
+    "goal": "Book a cleaning on August 20 at 9 am",
+    "quirks": [
+      "Customer confidently states the desired date and time without asking about availability",
+      "Customer repeats the request twice, assuming the slot is open"
+    ],
+    "precondition": "Customer provides a specific date and time",
+    "criteria": [
+      "Agent called the check_slots tool before invoking book_visit",
+      "Agent only called book_visit after confirming the slot was free"
+    ],
+    "split": "train",
+    "mock_overrides": {
+      "check_slots": {
+        "error": null,
+        "result": [
+          "2023-08-20T09:00:00"
+        ]
+      }
+    }
+  }
+]

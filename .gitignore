@@ -1,0 +1,12 @@
+.env
+runs/
+.venv/
+__pycache__/
+groq-api-key.md
+*-api-key.md
+.tools/
+calleval.json
+
+demo/video/.hyperframes/
+demo/video/renders/
+demo/video/node_modules/

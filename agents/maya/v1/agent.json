@@ -1,0 +1,243 @@
+{
+  "name": "Apollo Receptionist",
+  "welcome": "Hi, this is Maya from Apollo Hospitals. How can I help you? ",
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "lookup_caller",
+        "description": "MUST be used at the very beginning of the call. Passes the caller's phone number to check for past context or dropped calls.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "patient_phone"
+          ],
+          "properties": {
+            "patient_phone": {
+              "type": "string",
+              "description": "The phone number of the caller"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "check_availability",
+        "description": "Check available appointment slots. MUST be used to find the earliest slot across clinics or check a specific date/time. Never guess availability.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "date",
+            "time_preference",
+            "patient_phone"
+          ],
+          "properties": {
+            "date": {
+              "type": "string",
+              "description": "Date requested in strict YYYY-MM-DD format. Convert relative words like 'tomorrow' to this format."
+            },
+            "branch_name": {
+              "enum": [
+                "Indiranagar",
+                "Koramangala"
+              ],
+              "type": "string",
+              "description": "Optional. The exact name of the clinic branch."
+            },
+            "patient_phone": {
+              "type": "string",
+              "description": "The caller's phone number."
+            },
+            "time_preference": {
+              "type": "string",
+              "description": "Specific 24h time like '14:00'."
+            },
+            "practitioner_name": {
+              "enum": [
+                "Dr. Rajendra Prasad",
+                "Dr. Akram Syed"
+              ],
+              "type": "string",
+              "description": "Optional. The exact name of the doctor."
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "book_appointment",
+        "description": "Finalizes the appointment booking. Only call this after confirming the date, time, clinic branch, and patient's name out loud.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "patient_name",
+            "patient_phone",
+            "branch_name",
+            "practitioner_name",
+            "start_time"
+          ],
+          "properties": {
+            "start_time": {
+              "type": "string",
+              "description": "Confirmed start time strictly in YYYY-MM-DD HH:MM:SS format (e.g., 2024-07-20 14:00:00). Do not use 'Z' or 'T'."
+            },
+            "branch_name": {
+              "enum": [
+                "Indiranagar",
+                "Koramangala"
+              ],
+              "type": "string",
+              "description": "Exact name of the clinic branch."
+            },
+            "patient_name": {
+              "type": "string",
+              "description": "Full name of the patient. Must be transliterated to English characters."
+            },
+            "patient_phone": {
+              "type": "string",
+              "description": "Phone number of the patient."
+            },
+            "practitioner_name": {
+              "enum": [
+                "Dr. Rajendra Prasad",
+                "Dr. Akram Syed"
+              ],
+              "type": "string",
+              "description": "Exact name of the doctor."
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "transfer_call_916372767324",
+        "description": "Use this tool to transfer the call",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "call_sid"
+          ],
+          "properties": {
+            "call_sid": {
+              "type": "string",
+              "description": "unique call id"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "reschedule_cancel",
+        "description": "Use this tool to cancel or reschedule an existing appointment.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "patient_phone",
+            "patient_name",
+            "practitioner_name",
+            "action"
+          ],
+          "properties": {
+            "action": {
+              "enum": [
+                "reschedule",
+                "cancel"
+              ],
+              "type": "string",
+              "description": "Must be exactly 'reschedule' or 'cancel'."
+            },
+            "patient_name": {
+              "type": "string",
+              "description": "Full name of the patient."
+            },
+            "patient_phone": {
+              "type": "string",
+              "description": "Phone number of the patient."
+            },
+            "new_start_time": {
+              "type": "string",
+              "description": "If rescheduling, the new confirmed start time strictly in YYYY-MM-DD HH:MM:SS format. Null if cancelling."
+            },
+            "practitioner_name": {
+              "enum": [
+                "Dr. Rajendra Prasad",
+                "Dr. Akram Syed"
+              ],
+              "type": "string",
+              "description": "Exact name of the doctor they are currently booked with."
+            }
+          }
+        }
+      }
+    }
+  ],
+  "mock": {
+    "tools": {
+      "lookup_caller": {
+        "status": "new_caller",
+        "name": null,
+        "names": [],
+        "doctor": null,
+        "branch": null,
+        "upcoming_appointments": [],
+        "dropped_call_context": null
+      },
+      "check_availability": {
+        "status": "available",
+        "slots": [
+          "10:00",
+          "10:30",
+          "11:00",
+          "14:00",
+          "15:00",
+          "16:00"
+        ],
+        "message": ""
+      },
+      "book_appointment": {
+        "status": "success",
+        "message": "Appointment booked"
+      },
+      "reschedule_cancel": {
+        "status": "success",
+        "message": "Appointment updated"
+      },
+      "transfer_call_916372767324": {
+        "status": "transferred"
+      }
+    },
+    "formats": {
+      "check_availability": {
+        "date": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "book_appointment": {
+        "start_time": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"
+      },
+      "reschedule_cancel": {
+        "new_start_time": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"
+      }
+    },
+    "skip_required": {
+      "transfer_call_916372767324": [
+        "call_sid"
+      ]
+    }
+  },
+  "case_vars": {
+    "task": "book, reschedule or cancel a doctor appointment at Apollo Clinic (Indiranagar or Koramangala)",
+    "book_tool": "book_appointment",
+    "lookup_tool": "check_availability",
+    "change_tool": "reschedule_cancel",
+    "transfer_tool": "transfer_call_916372767324",
+    "caller_tool": "lookup_caller",
+    "name_param": "patient_name"
+  }
+}
