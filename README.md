@@ -2,7 +2,9 @@
 
 **Test a voice agent before your customers do.** calleval makes a simulated customer talk to your agent, has an LLM judge the call against test cases, and shows exactly what passed, what failed, and why, with quoted evidence. It can run the conversation as text (fast, cheap) or as a **real audio call** (finds what text can't: misheard names, awkward number reading, slow replies). Everything runs on your machine; API keys are optional.
 
-> **Demo video:** [`docs/demo.mp4`](docs/demo.mp4): a real call where the agent mishears "Neha Kapoor" as "Ne Kippur" and books under it, the report that catches it, and a prompt fix generated from the failure.
+<video src="https://github.com/SwapnilChand/calleval/raw/main/docs/demo.mp4" poster="https://github.com/SwapnilChand/calleval/raw/main/docs/poster.png" controls muted width="100%"></video>
+
+> **Demo video** (64 s, [`docs/demo.mp4`](docs/demo.mp4)): a real call where the agent mishears "Neha Kapoor" as "Ne Kippur" and books under it, the report that catches it with quoted evidence, and a prompt fix generated from the failure.
 
 ## What you get
 - **Two simulated voice chats**: your agent and a customer persona talk over real audio (local LiveKit server, per-speaker recordings), or over text.
