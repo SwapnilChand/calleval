@@ -5,7 +5,7 @@ description: Test a voice agent with simulated customers and a judge. Use when t
 
 # calleval
 
-Project root = the folder with `calleval.sh`. All state is plain files (agents/, cases/, runs/). Commit prompt versions with git. Never name or depend on a specific agent platform; the user's prompt and tools are the interface.
+Project root = the folder with `calleval.sh` (the calleval repo). If `./install.sh` was run, a `calleval` command works from any folder and every `./calleval.sh <cmd>` below can be written `calleval <cmd>`; work files (agents/, cases/, runs/) always live in the repo. If neither the command nor the repo is available, tell the user to clone https://github.com/SwapnilChand/calleval and run `./install.sh`. All state is plain files (agents/, cases/, runs/). Commit prompt versions with git. Never name or depend on a specific agent platform; the user's prompt and tools are the interface.
 
 ## 1. Onboard (a conversation: one question at a time, never ask the user to paste keys in chat)
 Everything runs on the user's machine. Keys are optional; they only buy better models. Start with `./calleval.sh doctor` and show the result.

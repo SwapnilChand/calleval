@@ -2,9 +2,7 @@
 
 **Test a voice agent before your customers do.** calleval makes a simulated customer talk to your agent, has an LLM judge the call against test cases, and shows exactly what passed, what failed, and why, with quoted evidence. It can run the conversation as text (fast, cheap) or as a **real audio call** (finds what text can't: misheard names, awkward number reading, slow replies). Everything runs on your machine; API keys are optional.
 
-[![calleval demo: a real call where the agent mishears a name, and the report that catches it](docs/poster.png)](docs/demo.mp4)
-
-> **Demo video** (64 s, [`docs/demo.mp4`](docs/demo.mp4)): a real call where the agent mishears "Neha Kapoor" as "Ne Kippur" and books under it, the report that catches it with quoted evidence, and a prompt fix generated from the failure.
+> **Demo video:** [`docs/demo.mp4`](docs/demo.mp4): a real call where the agent mishears "Neha Kapoor" as "Ne Kippur" and books under it, the report that catches it, and a prompt fix generated from the failure.
 
 ## What you get
 - **Two simulated voice chats**: your agent and a customer persona talk over real audio (local LiveKit server, per-speaker recordings), or over text.
@@ -23,6 +21,13 @@ git clone https://github.com/SwapnilChand/calleval && cd calleval
 ./calleval.sh report first                   # runs/first/report.html
 ```
 Text runs need only Python 3.11+. `free-keys` uses free tiers of Gemini and Groq (add `GEMINI_API_KEY` and `GROQ_API_KEY` to `.env`). For real-audio calls: `./calleval.sh setup --install voice` (about 600 MB, asks first) then `./calleval.sh voice-run --agent maya --version v2 --cases relative-date-resolution --run-id v1`.
+
+## Install the Claude Code skill (optional)
+```bash
+./install.sh              # links the skill into ~/.claude/skills and adds a `calleval` command to ~/.local/bin
+./install.sh --uninstall  # removes both (your agents, cases and runs are untouched)
+```
+Then, in Claude Code from any folder: *"test my voice agent with calleval"*. Inside this repo the skill is picked up automatically, no install needed.
 
 ## Bring your agent
 `calleval new-agent` asks what you are starting from:
