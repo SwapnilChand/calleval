@@ -2,6 +2,55 @@
 
 calleval tests a voice agent's prompt and tools by having a simulated customer talk to it, then judging the conversation. Everything runs on your machine; keys are optional.
 
+## The picture
+
+**The whole loop.** You bring an agent (its prompt and tools, or a LiveKit agent file), a fake backend that answers its tool calls, and test cases. calleval runs conversations as text or as real audio, a judge decides pass or fail with quoted evidence, and the report feeds `improve`, which proposes the next prompt version to re-run.
+
+```mermaid
+flowchart LR
+    subgraph IN["What you bring"]
+        A["Agent under test<br/>prompt + tools<br/>(or a LiveKit agent file)"]
+        B["Fake backend<br/>what each tool returns"]
+        C["Test cases<br/>default + generated<br/>persona, goal, criteria"]
+    end
+    IN --> R{{"run<br/>text conversations"}}
+    IN --> V{{"voice-run<br/>real audio calls"}}
+    R --> T["Conversations<br/>transcript + tool calls"]
+    V --> T
+    V --> AU["Audio per speaker<br/>+ voice analysis<br/>latency, talk-over, mishearings"]
+    AU --> J
+    T --> J["Judge<br/>Claude Code or an LLM<br/>quotes evidence per criterion"]
+    J --> P["Report<br/>pass / fail + reasons<br/>+ suggested fixes"]
+    P --> I["improve<br/>new prompt version<br/>from failed train cases"]
+    I -->|"re-run, check held-out cases"| IN
+```
+
+**What happens in one real-audio call.** The persona (the simulated customer) and the twin (your agent, rebuilt from its prompt and tools) join one room on a local server. Each hears, thinks and speaks like a phone agent would. A recorder keeps each speaker's audio separate, and the detectors read the timing and text afterwards.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant CLI as calleval voice-run
+    participant LK as Local LiveKit server
+    participant P as Persona (customer bot)
+    participant T as Twin (agent under test)
+    participant REC as Recorder
+    participant AN as Detectors
+    CLI->>LK: start server, create a room
+    CLI->>P: dispatch persona (caller prompt from the case)
+    CLI->>T: dispatch twin (your prompt + tools)
+    REC->>LK: join, record each speaker separately
+    T->>P: greeting (speech)
+    P->>T: customer line (speech to text, model, text to speech)
+    T->>T: tool call against the fake backend
+    T->>P: reply (speech)
+    Note over P,T: turns repeat until the persona hangs up or a transfer
+    LK-->>REC: audio tracks
+    REC-->>AN: wav per speaker + event timestamps
+    AN-->>CLI: latency, talk-over, cut-off turns, mishearings
+    CLI-->>CLI: transcript.json, ready for judge and report
+```
+
 ## The parts
 | Part | What it is | Where |
 |---|---|---|
