@@ -16,6 +16,19 @@ That adds a `calleval` command and the Claude Code skill (nothing else, no packa
 
 No install is needed to just look: `./calleval.sh doctor` works straight from the clone.
 
+### Optional extras (only if you want everything to run on your machine)
+The install above needs nothing else. Text runs work with just Python plus **either** an API key **or** a local model. Add these only for the parts you want; `calleval doctor` shows what is missing for your choices, and `calleval setup` offers each one with a yes/no:
+
+| You want | Install (all optional) | Size |
+|---|---|---|
+| Language models with **no keys, fully local** | [Ollama](https://ollama.com), then `ollama serve` and `ollama pull qwen2.5:3b` (small local models are weaker; hosted free tiers work better) | about 2 GB |
+| Language models via **free hosted keys** instead | add `GEMINI_API_KEY` / `GROQ_API_KEY` to `.env`; no install | none |
+| **Real-audio calls** (local call server, speech-to-text, local voices) | `calleval setup --install voice` (a Python environment with `livekit-agents`, `piper-tts`, `faster-whisper`, plus the `livekit-server` binary and two Piper voices) | about 600 MB |
+| Audio file output (`audio.mp3`) | `ffmpeg` from your package manager | small |
+| Free quick probe of the voice twin (`calleval twin-debug`) | the LiveKit `lk` CLI | small |
+
+Nothing is installed without asking, and everything lands inside the calleval folder (`.venv/`, `.tools/`), except the `calleval` command and the skill link from `install.sh`.
+
 ## What you get
 - **Two simulated voice chats**: your agent and a customer persona talk over real audio (local LiveKit server, per-speaker recordings), or over text.
 - **LLM-as-judge**: every conversation is judged against criteria. Claude Code judges by default (your subscription); `--llm` uses any OpenAI-compatible model instead.
