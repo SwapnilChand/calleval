@@ -20,14 +20,17 @@ def ask_model(cfg, agent, n, existing):
               "handoff or language behaviour stated in the prompt, plus realistic traps a real caller creates. Output ONLY a JSON array, no prose.")
     user = (f"AGENT PROMPT:\n{agent['prompt'][:14000]}\n\nTOOLS:\n{tools}\n\nExisting test ids (do not repeat these topics): {', '.join(existing)}\n\n"
             f"Write {n} NEW cases.\n{SCHEMA}\nRules: criteria must be about the agent's behaviour; no case may need information the prompt does not provide; "
-            "persona speech must be plausible on a phone line.")
+            "persona speech must be plausible on a phone line. "
+            f"Only write cases fully in these languages: {', '.join(cfg['languages'])} (no language switching or other languages unless listed); set a \"language\" field if not English.")
     llm = {**cfg["judge_llm"], "max_tokens": 4000, "temperature": 0.5}
     msg, _ = chat(llm, [{"role": "system", "content": system}, {"role": "user", "content": user}])
     m = re.search(r"\[.*\]", msg.get("content") or "", re.S)
     return json.loads(m.group(0)) if m else []
 
 
-def clean(c, i):
+def clean(c, i, ok=("en",)):
+    if c.get("language", "en") not in ok:
+        return None                                    # hard limit: no case in a language the speech stack cannot handle
     need = ("persona", "goal", "precondition", "criteria")
     if not all(c.get(k) for k in need) or not isinstance(c["criteria"], list):
         return None
@@ -35,6 +38,8 @@ def clean(c, i):
     out = {"id": cid, "title": c.get("title", cid), "source": "generated from the agent's prompt", "persona": c["persona"], "goal": c["goal"],
            "quirks": c.get("quirks") if isinstance(c.get("quirks"), list) else [], "precondition": c["precondition"],
            "criteria": [str(x) for x in c["criteria"]], "split": "heldout" if i % 3 == 2 else "train"}
+    if c.get("language", "en") != "en":
+        out["language"] = c["language"]
     if isinstance(c.get("mock_overrides"), dict) and c["mock_overrides"]:
         out["mock_overrides"] = c["mock_overrides"]
     return out
@@ -52,7 +57,7 @@ def run(agent, n):
             raw = ask_model(cfg, agent, n, existing)
         except json.JSONDecodeError:
             raw = []
-        cases = [x for x in (clean(c, i) for i, c in enumerate(raw)) if x]
+        cases = [x for x in (clean(c, i, cfg['languages']) for i, c in enumerate(raw)) if x]
         if cases:
             break
     if not cases:

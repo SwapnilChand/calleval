@@ -2,7 +2,7 @@
 import argparse, os, sys, time, webbrowser
 from pathlib import Path
 from . import ui
-from .core import ROOT, Skip, config_path, date_vars, fill, load_agent, load_cases, load_config, versions
+from .core import ROOT, Skip, why_not, config_path, date_vars, fill, load_agent, load_cases, load_config, versions
 
 QUICK = ["relative-date-resolution", "wrong-date-then-correct", "tool-failure-honesty", "no-guessed-availability",
          "confirm-before-booking", "human-handoff", "asks-name-never-invents", "prompt-injection"]
@@ -14,15 +14,7 @@ def stage(n, title, why=""):
 
 
 def applicable(agent, cases, cfg):
-    cv = {**date_vars(cfg["now"]), **agent.get("case_vars", {})}
-    out = []
-    for c in cases:
-        try:
-            fill(c, cv)
-            out.append(c)
-        except Skip:
-            pass
-    return out
+    return [c for c in cases if not why_not(agent, c, cfg)]
 
 
 def pick_cases(agent, cfg, wanted):

@@ -107,6 +107,7 @@ You can try the report with no keys at all: `calleval demo` replays a real recor
 | `calleval voice-run --agent NAME` | The same over **real audio** on a local server: needs `calleval setup --install voice`. About 2 minutes per call. | per-call lines, audio saved |
 | `calleval judge RUN [--llm]` | Prepares each conversation for judging. Without `--llm`, Claude Code writes the verdicts; with it, a model does. | `judged ...` lines |
 | `calleval report RUN` | The table in the terminal and `report.html`. | as in stage 6 |
+| `calleval fit --agent NAME` | Researches which tests suit this agent (from its prompt, tools and your speech stack) and says why the others are skipped. Runs automatically after `new-agent --prompt/--livekit-file`. | one line per case: `applies` or `not suitable` + the reason |
 | `calleval improve --agent NAME --from RUN` | Proposes a better prompt as a **new version** from that run's failed training cases (held-out cases are never read) and writes `CHANGES.md`. Your old version is untouched. | `✓ created agents/maya/v3/prompt.md  +7 −4 lines`, one line per change |
 | `calleval new-version NAME` | Copies the latest prompt so you can edit it yourself. | |
 | `calleval demo` | Replays a real recorded run, no keys. | |
@@ -189,5 +190,7 @@ How it works: your customer bot listens to the agent's audio (transcribed locall
 - Voice runs rebuild your agent as a "voice twin" (your prompt and tools) on the speech and language services you choose. Audio findings hold for **those** services, not necessarily your production stack.
 - Small local models follow long prompts and tools poorly; free hosted tiers are rate-limited. One run per case is a quick look; three separates real issues from flukes.
 - The LLM judge and the automatic voice flags are hints with evidence, not ground truth. Calibrate against your own listening.
+- **Which tests suit your agent.** Right after you import an agent, `calleval fit --agent NAME` reads its prompt, tools and your speech stack and lists every case as *applies* or *not suitable, because …* (no such tool, the prompt never promises that behaviour, language not supported). Skipped cases are never run, and it is saved to `agents/NAME/fit.json`.
+- **English only by default (hard limit).** Cases tagged with another language (`"language": "hi"`, e.g. `language-switch-hindi`) are skipped, with a printed note, and `gen-cases` will not write them. Add a language to `"languages"` in `calleval.json` only once your speech-to-text, text-to-speech and model really handle it (for Hindi that means Indic models such as Sarvam); the Hindi case failed on every English-stack run, which says nothing about your agent.
 - `agents/maya/v3` is an example of what `calleval improve` produces, and a useful warning: re-tested on 24 conversations per version it was **not better than v2** (same on 4 cases, worse on 1, Hindi still failing on both). Always re-run a proposed version before adopting it; `v2` is the baseline. Details in `agents/maya/v3/CHANGES.md`.
 - Piper (local voices) is GPL-3.0 and installed on demand, not bundled. The rest of calleval is MIT.

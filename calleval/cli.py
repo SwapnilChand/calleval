@@ -1,7 +1,7 @@
 import argparse, os, hashlib, json, shutil, sys, time
 from pathlib import Path
 from . import ui
-from .core import ROOT, Skip, config_path, date_vars, fill, load_agent, load_cases, load_config, load_env, versions
+from .core import ROOT, Skip, why_not, config_path, date_vars, fill, load_agent, load_cases, load_config, load_env, versions
 from .judge import judge_input_md, llm_judge
 from .report import load_runs, print_table, summarize, write_html
 from .sim import run_conversation
@@ -85,6 +85,7 @@ def cmd_newagent(a):
         if found["welcome"]:
             ui.line("!", "yellow", "the greeting is generated at runtime (instruction kept); write the line it usually says into agent.json 'welcome'")
         ui.hint(f"review {d.relative_to(ROOT)}/agent.json (welcome line, mock results), then `calleval gen-cases --agent {name}`")
+        cmd_fit(argparse.Namespace(agent=name, version=None))                   # research which tests suit the imported agent
         return
     d.mkdir(parents=True)
     if a.prompt:
@@ -100,6 +101,8 @@ def cmd_newagent(a):
     ui.line("✓", "green", f"created {d.relative_to(ROOT)}" + (f" with {len(tools)} tool(s)" if tools else ""))
     ui.hint(f"edit {d.relative_to(ROOT)}/agent.json (welcome line, case_vars, mock tool results)"
             + ("; ask Claude Code to write the prompt from the template (`/calleval`)" if source == "scratch" else ""))
+    if source == "prompt":
+        cmd_fit(argparse.Namespace(agent=name, version=None))
 
 
 def cmd_newver(a):
@@ -131,11 +134,10 @@ def cmd_run(a):
     done = errs = 0
     t_all = time.time()
     for c in cases:
-        try:
-            case = fill(c, cvars)
-        except Skip as s:
-            ui.line("-", "dim", f"{c['id']:34} skipped", f"this agent has no '{s}' tool role (see case_vars in agent.json)")
+        if (w := why_not(agent, c, cfg)):
+            ui.line("-", "dim", f"{c['id']:34} skipped", w)
             continue
+        case = fill(c, cvars)
         for n in range(1, runs + 1):
             d = base / f"{agent['name']}-{agent['version']}" / case["id"] / str(n)
             if (d / "transcript.json").exists():
@@ -180,11 +182,10 @@ def cmd_voice(a):
     t_all = time.time()
     try:
         for c in cases:
-            try:
-                case = fill(c, cvars)
-            except Skip as s:
-                ui.line("-", "dim", f"{c['id']:34} skipped", f"this agent has no '{s}' tool role")
+            if (w := why_not(agent, c, cfg)):
+                ui.line("-", "dim", f"{c['id']:34} skipped", w)
                 continue
+            case = fill(c, cvars)
             for n in range(1, (a.runs or 1) + 1):
                 d = base / f"{agent['name']}-{agent['version']}" / case["id"] / str(n)
                 if (d / "transcript.json").exists():
@@ -245,6 +246,21 @@ def cmd_gencases(a):
         raise UserError("the model did not return usable test cases", "try again, or use a stronger model (`calleval setup --preset free-keys`); Claude Code can also write them (the skill)")
     ui.line("✓", "green", f"wrote {out.relative_to(ROOT)}", "review and edit it; about a third are held out for the improve loop")
     ui.hint(f"calleval run --agent {agent['name']} --cases generated --runs 1 --run-id gen1")
+
+
+def cmd_fit(a):
+    """After importing an agent: which tests suit it, and why not for the rest. Reads its prompt and tools; saved to agents/<name>/fit.json."""
+    cfg = load_config()
+    agent = agent_or_die(a.agent, a.version)
+    ui.header("calleval fit", f"{agent['name']} {agent['version']}", f"languages supported: {', '.join(cfg['languages'])}")
+    fit = {}
+    for c in load_cases("all", "all", agent["name"], all_languages=True):
+        w = why_not(agent, c, cfg)
+        fit[c["id"]] = {"applies": not w, "reason": w or "ok"}
+        ui.line("✓" if not w else "-", "green" if not w else "dim", f"{c['id']:34} {'applies' if not w else 'not suitable'}", w or "")
+    (ROOT / "agents" / agent["name"] / "fit.json").write_text(json.dumps(fit, indent=1, ensure_ascii=False) + "\n")
+    n = sum(v["applies"] for v in fit.values())
+    ui.hint(f"{n} of {len(fit)} cases suit this agent; the rest are skipped automatically. Wrong call? Edit the agent's prompt/tools or the case's needs_prompt, then rerun `calleval fit`.")
 
 
 def cmd_improve(a):
@@ -308,10 +324,8 @@ def cmd_live(a):
         if c.get("mock_overrides"):
             ui.line("-", "dim", f"{c['id']:34} skipped", "needs a forced tool failure; only possible in text and voice-twin runs")
             continue
-        try:
+        if not why_not(agent, c, cfg):
             cases.append(fill(c, cvars))
-        except Skip:
-            pass
     if not cases:
         raise UserError("no case can run live for this agent", "pick cases with --cases id,id")
     n = len(cases) * a.runs
@@ -389,6 +403,7 @@ HELP = f"""{ui.c("calleval", "bold", "cyan")} · test a voice agent with simulat
   doctor        check what works and what is missing
   setup         pick a stack (local: no keys, or free-keys) and install the optional voice pieces
   new-agent     add your agent: from scratch, your prompt (+ tools), or a LiveKit agent file
+  fit           which tests suit your agent (and why the others are skipped)
   gen-cases     write test cases from the agent's own prompt and tools
 
 {ui.c("Test", "bold")}
@@ -448,6 +463,8 @@ def build_parser():
     x.add_argument("--agent", required=True, metavar="NAME"); x.add_argument("--version", metavar="vN")
     x = cmd("gen-cases", "Write test cases from the agent's own prompt and tools, using the configured language model.", "  calleval gen-cases --agent maya\n  calleval gen-cases --agent dental --n 8", cmd_gencases)
     x.add_argument("--agent", required=True, metavar="NAME"); x.add_argument("--version", metavar="vN"); x.add_argument("--n", type=int, default=6, help="how many cases (default 6)")
+    x = cmd("fit", "Which tests suit this agent (from its prompt, tools and your speech stack), and why the others do not.", "  calleval fit --agent maya", cmd_fit)
+    x.add_argument("--agent", required=True, metavar="NAME"); x.add_argument("--version", metavar="vN")
     x = cmd("improve", "Propose a revised prompt as a new version, from the failed train-split cases of a run (the self-improving loop).", "  calleval improve --agent maya --from vcmp", cmd_improve)
     x.add_argument("--agent", required=True, metavar="NAME"); x.add_argument("--version", metavar="vN", help="default: latest"); x.add_argument("--from", dest="from_run", required=True, metavar="RUN_ID")
     x = cmd("start", "One guided command: check setup, pick the agent, run, judge, show results, open the report. Status after every stage.",

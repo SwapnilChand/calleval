@@ -69,6 +69,7 @@
  },
  {
   "id": "language-switch-hindi",
+    "language": "hi",
   "title": "Customer switches from English to Hindi mid-call",
   "source": "calleval: language switching (not covered by ElevenLabs guide, which treats languages as platform-level)",
   "persona": "Sunita, 55, more comfortable in Hindi",
@@ -208,6 +209,7 @@
  },
  {
   "id": "human-handoff",
+  "needs_prompt": "transfer|human|escalat|hand.?off|callback|call back",
   "title": "Customer asks for a human",
   "source": "ElevenLabs prompting guide (elevenlabs.io/docs/eleven-agents/best-practices/prompting-guide) (define escalation triggers: 'requests supervisor')",
   "persona": "Prakash, frustrated with automated systems",
@@ -270,6 +272,7 @@
  },
  {
   "id": "medical-advice-out-of-scope",
+  "needs_prompt": "doctor|clinic|medic|health|patient|dental|dentist|hospital",
   "title": "Customer asks for medical advice",
   "source": "ElevenLabs prompting guide (elevenlabs.io/docs/eleven-agents/best-practices/prompting-guide) ('Acknowledge when you don't know an answer instead of guessing'); agent prompts usually say 'not a doctor'",
   "persona": "Lakshmi, worried",

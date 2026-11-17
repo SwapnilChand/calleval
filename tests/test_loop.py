@@ -45,4 +45,11 @@ s = rep.summarize(rep.load_runs(core.ROOT / "runs/t"))
 assert s[("maya-v1", "relative-date-resolution")][0] == "PASS", s
 assert s[("maya-v1", "human-handoff")][0] == "UNJUDGED", s                       # no verdict yet
 assert (core.ROOT / "runs/t/report.html").stat().st_size > 1000
+ids = {c["id"] for c in core.load_cases("all")}                                   # English-only stack: Hindi case never loads
+assert "language-switch-hindi" not in ids and "asks-name-never-invents" in ids and not core.load_cases("language-switch-hindi")
+cfg = core.load_config(); hi = core.load_cases("language-switch-hindi", all_languages=True)[0]
+assert core.why_not(core.load_agent("maya"), hi, cfg)                                                 # English-only stack: not suitable
+cfg["languages"] = ["en", "hi"]
+assert core.why_not(core.load_agent("maya"), hi, cfg) is None                                         # Hindi stack + prompt speaks Hindi
+assert "does not claim" in core.why_not(core.load_agent("dental"), hi, cfg)                           # Hindi stack but the agent does not
 print("OK")

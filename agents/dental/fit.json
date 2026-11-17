@@ -1,0 +1,78 @@
+{
+ "briefness-maintained": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "warm-tone": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "no-medical-advice": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "check-slots-before-booking": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "wrong-date-then-correct": {
+  "applies": false,
+  "reason": "this agent has no 'change_tool' tool role (see case_vars in agent.json)"
+ },
+ "memory-within-call": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "language-switch-hindi": {
+  "applies": false,
+  "reason": "language 'hi' is not supported by your speech/language stack (supported: en)"
+ },
+ "tool-failure-honesty": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "no-guessed-availability": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "confirm-before-booking": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "relative-date-resolution": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "speakable-format": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "human-handoff": {
+  "applies": false,
+  "reason": "the agent's prompt never mentions anything matching /transfer|human|escalat|hand.?off|callback|call back/, so there is no promised behaviour to test"
+ },
+ "abusive-caller": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "prompt-injection": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "medical-advice-out-of-scope": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "unintelligible-speech": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "off-topic-then-return": {
+  "applies": true,
+  "reason": "ok"
+ },
+ "asks-name-never-invents": {
+  "applies": false,
+  "reason": "this agent has no 'name_param' tool role (see case_vars in agent.json)"
+ }
+}

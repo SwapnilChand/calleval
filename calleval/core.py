@@ -1,5 +1,5 @@
 """Paths, config, env loading, agent/case loading. Zero third-party deps."""
-import datetime as dt, json, os, re
+import sys, datetime as dt, json, os, re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -18,6 +18,9 @@ DEFAULTS = {
               "gemini": {"twin_model": "gemini-3.8-flash-lite-tts", "persona_model": "gemini-3.8-flash-tts",
                          "twin_voice": "Kore", "persona_voice": "Puck"},
               "livekit_url": "ws://127.0.0.1:7880", "api_key": "devkey", "api_secret": "secretsecretsecretsecretsecret00"},
+    # Hard limit: cases in a language outside this list are never loaded, never run. Add a language only once the STT, TTS and language model
+    # you configured really handle it (e.g. "hi" with Indic models such as Sarvam); the default stack is English-only.
+    "languages": ["en"],
     "now": "2026-11-17 10:30",   # pinned so "tomorrow"/"Thursday" mean the same on every run
     "from_number": "9876543210",
     "turns": 8,                  # max customer turns per conversation
@@ -88,7 +91,7 @@ def fill(obj, vars_):
     return obj
 
 
-def load_cases(selector="all", split="all", agent=None):
+def load_cases(selector="all", split="all", agent=None, all_languages=False):
     """selector: all | universal | generated | comma-separated case ids."""
     out = []
     for p in sorted((ROOT / "cases").rglob("*.json")):
@@ -106,4 +109,32 @@ def load_cases(selector="all", split="all", agent=None):
         out = [c for c in out if c["id"] in ids]
     if split != "all":
         out = [c for c in out if c.get("split", "train") == split]
-    return out
+    if all_languages:
+        return out
+    ok = load_config()["languages"]
+    skipped = [c for c in out if c.get("language", "en") not in ok]
+    if skipped:
+        print(f"skipped {len(skipped)} case(s) in a language this stack does not support ({', '.join(sorted({c.get('language', 'en') for c in skipped}))}; "
+              f"supported: {', '.join(ok)}). Add the language to \"languages\" in calleval.json only once your STT, TTS and model handle it.", file=sys.stderr)
+    return [c for c in out if c not in skipped]
+
+
+LANG_WORDS = {"hi": "hindi|hinglish|devanagari", "ta": "tamil", "te": "telugu", "bn": "bengali|bangla", "mr": "marathi", "kn": "kannada",
+              "es": "spanish|español", "fr": "french|français", "de": "german|deutsch"}
+
+
+def why_not(agent, case, cfg, cvars=None):
+    """Why a case is NOT suitable for this agent (a sentence), or None when it applies. Read from the agent's own prompt and tools."""
+    lang = case.get("language", "en")
+    if lang not in cfg["languages"]:
+        return f"language '{lang}' is not supported by your speech/language stack (supported: {', '.join(cfg['languages'])})"
+    if lang != "en" and not re.search(LANG_WORDS.get(lang, re.escape(lang)), agent["prompt"], re.I):
+        return f"the agent's prompt does not claim to speak '{lang}'"
+    need = case.get("needs_prompt")
+    if need and not re.search(need, agent["prompt"], re.I):
+        return f"the agent's prompt never mentions anything matching /{need}/, so there is no promised behaviour to test"
+    try:
+        fill(case, {**date_vars(cfg["now"]), **agent.get("case_vars", {}), **(cvars or {})})
+    except Skip as s:
+        return f"this agent has no '{s}' tool role (see case_vars in agent.json)"
+    return None

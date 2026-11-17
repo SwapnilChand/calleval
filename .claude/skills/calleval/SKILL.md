@@ -22,6 +22,8 @@ Everything runs on the user's machine. Keys are optional; they only buy better m
 ## 2. Cases
 - Quickest: `./calleval.sh gen-cases --agent <name> [--n 6]` writes cases from the agent's prompt with the configured model (status shown as it works, about a third marked held-out). You can also write them yourself (below), which usually gives sharper cases.
 - Fixed suite: `cases/universal/core.json` (each case lists its `source`). Add more by dropping any `*.json` (a case or a list) under `cases/`.
+- After importing an agent, run `./calleval.sh fit --agent <name>` and read it with the user: it decides which tests suit this agent (tools it has, behaviours its prompt promises, languages its prompt claims AND the stack supports). Review the "not suitable" reasons; if one is wrong, fix the cause (prompt, tools, case_vars, or a case's `needs_prompt`). Then judge the agent yourself for anything else unsuitable before generating cases.
+- Languages are a hard limit: only write or run cases in languages listed under `languages` in the config (default `["en"]`); tag others with `"language": "<code>"`. Never add a language (e.g. Hindi) unless the STT, TTS and model are confirmed to handle it (Hindi needs Indic models such as Sarvam).
 - Prompt-derived: read the agent's prompt, list every promise, tool, constraint, handoff, language rule; write one case per item to `cases/generated/<agent>/<topic>.json`, same schema as core.json (persona, goal, quirks, precondition, criteria = yes/no statements, checks = deterministic tool-call or regex checks, mock_overrides). Mark ~30% `"split": "heldout"`.
 - Every case needs a `precondition`: what the CUSTOMER must do for the test to count.
 
