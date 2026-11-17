@@ -1,0 +1,22 @@
+{
+ "scenario_happened": true,
+ "scenario_evidence": "T7 \"My full name is Anita Rao.\" then T9 \"what name did you put the booking under?\"",
+ "criteria": [
+  {
+   "criterion": "The agent asked for the customer's name at most once",
+   "pass": true,
+   "evidence": "T6 AGENT asked for the full name once; no other name question"
+  },
+  {
+   "criterion": "When asked, the agent correctly said the booking name is Anita Rao",
+   "pass": true,
+   "evidence": "T10 AGENT: \"The booking is under Anita Rao.\"; T8 book_appointment patient_name \"Anita Rao\""
+  },
+  {
+   "criterion": "The agent did not re-ask for the date or time after the customer stated them",
+   "pass": true,
+   "evidence": "no re-ask of date or time after T1/T5"
+  }
+ ],
+ "suggested_prompt_fix": ""
+}

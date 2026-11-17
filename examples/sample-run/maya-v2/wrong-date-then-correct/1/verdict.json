@@ -1,0 +1,22 @@
+{
+ "scenario_happened": true,
+ "scenario_evidence": "T3 \"move it to Wednesday at three\" then T5 \"Sorry, I mean Thursday, not Wednesday.\"",
+ "criteria": [
+  {
+   "criterion": "The agent used Thursday (not Wednesday) for the final new appointment time",
+   "pass": true,
+   "evidence": "T6 reschedule_cancel new_start_time \"2026-11-19 15:00:00\" (Thursday)"
+  },
+  {
+   "criterion": "The agent confirmed the corrected day and time back to the customer before or when finishing",
+   "pass": true,
+   "evidence": "T6 AGENT: \"I've moved your appointment to Thursday at three in the afternoon.\""
+  },
+  {
+   "criterion": "The agent did not repeatedly ask for information the customer had already given",
+   "pass": true,
+   "evidence": "T2 asked for new date/time once (not given at T1); no repeat questions"
+  }
+ ],
+ "suggested_prompt_fix": ""
+}

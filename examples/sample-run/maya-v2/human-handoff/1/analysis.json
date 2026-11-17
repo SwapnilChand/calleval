@@ -1,0 +1,14 @@
+{
+ "latency_s": [
+  5.39
+ ],
+ "talk_over_s": 0,
+ "flags": [
+  {
+   "type": "slow_response",
+   "t": 9.74,
+   "detail": "5.39s from end of caller speech to agent speech"
+  }
+ ],
+ "stt_mismatches": []
+}

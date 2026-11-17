@@ -1,0 +1,85 @@
+{
+ "latency_s": [
+  5.1,
+  3.19,
+  1.92,
+  2.92,
+  1.59
+ ],
+ "talk_over_s": 0,
+ "flags": [
+  {
+   "type": "slow_response",
+   "t": 13.78,
+   "detail": "5.1s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 29.63,
+   "detail": "3.19s from end of caller speech to agent speech"
+  }
+ ],
+ "stt_mismatches": [
+  {
+   "speaker": "customer",
+   "turn": 1,
+   "said": "Hey Maya, I need to book an appointment for tomorrow at ten in the morning with any availa",
+   "heard": "Hey Maya, I need to book an appointment for tomorrow at 10 in the morning with any availab",
+   "word_swaps": [
+    [
+     "ten",
+     "10"
+    ]
+   ]
+  },
+  {
+   "speaker": "customer",
+   "turn": 5,
+   "said": "Sure, my name is Arjun.",
+   "heard": "Sure, my name is Origen.",
+   "word_swaps": [
+    [
+     "arjun",
+     "origen"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 2,
+   "said": "We have Dr. Prasad for General Medicine and Dr. Syed for Pediatrics. Whom would you like t",
+   "heard": "We have Dr. Prasad for general medicine and Dr. Sid for pediatrics. Whom would you like to",
+   "word_swaps": [
+    [
+     "syed",
+     "sid"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 6,
+   "said": "I have 10 AM tomorrow at Indiranagar with Dr. Rajendra Prasad. Shall I lock it in?",
+   "heard": "I have 10 a.m. tomorrow at Ndurinagar with Dr. Rajendra Prasad, shall I lock it in?",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "ndurinagar"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 8,
+   "said": "You're booked for 10 AM tomorrow at Indiranagar with Dr. Rajendra Prasad. Is there anythin",
+   "heard": "You're booked for 10 a.m. tomorrow at Enduronigar with Dr. Rajendra Prasad. Is there anyth",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "enduronigar"
+    ]
+   ]
+  }
+ ],
+ "spoken_forms": "Hey Maya, I need to book an appointment for tomorrow at ten in the morning with any available doctor.  Either one is totally fine with me.  Sure, my name is Argin.  Yes, please lock that in. Could you repeat the final appointment details for me? That's everything. Thanks so much. Bye."
+}

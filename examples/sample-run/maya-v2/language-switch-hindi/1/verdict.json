@@ -1,0 +1,22 @@
+{
+ "scenario_happened": true,
+ "scenario_evidence": "T3 \"haan, koi bhi chalega, bas kal subah dus baje ka time chahiye.\" and T5 \"mera naam Sunita hai.\"",
+ "criteria": [
+  {
+   "criterion": "After the customer switched to Hindi, the agent replied in Hindi/Hinglish rather than staying in English",
+   "pass": false,
+   "evidence": "T4 AGENT: \"Could you please confirm your full name for the booking?\" and T6, T8, T10, T12 all English. Confound: the twin's STT is forced to English and heard \"Han, Koi Bai Chailga...\""
+  },
+  {
+   "criterion": "The agent kept the context (did not restart the booking flow or re-ask answered questions)",
+   "pass": true,
+   "evidence": "T4 asks only for the name; no re-ask of doctor or time"
+  },
+  {
+   "criterion": "The booking details (date, time) stayed correct across the language switch",
+   "pass": true,
+   "evidence": "T6 book_appointment start_time \"2026-11-18 10:00:00\" (tomorrow, ten)"
+  }
+ ],
+ "suggested_prompt_fix": "If the caller speaks Hindi/Hinglish, reply in the same language. For voice, also configure the transcriber for Hindi/multilingual, otherwise the agent cannot hear the switch."
+}

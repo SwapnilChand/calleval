@@ -1,0 +1,368 @@
+{
+ "agent": "maya",
+ "version": "v2",
+ "run": 1,
+ "case": {
+  "id": "wrong-date-then-correct",
+  "title": "Customer first names the wrong day, then corrects it",
+  "source": "calleval: self-correction (common voice failure)",
+  "persona": "Rohan Mehta, polite, a bit rushed",
+  "goal": "Move your existing appointment from Tuesday to Thursday at 3 PM (existing appointment is with the same doctor and branch you already go to)",
+  "quirks": [
+   "First say you want to move it to Wednesday at 3 PM. After the agent responds, say 'sorry, I mean Thursday, not Wednesday'"
+  ],
+  "precondition": "Customer first asked for Wednesday and then corrected to Thursday.",
+  "criteria": [
+   "The agent used Thursday (not Wednesday) for the final new appointment time",
+   "The agent confirmed the corrected day and time back to the customer before or when finishing",
+   "The agent did not repeatedly ask for information the customer had already given"
+  ],
+  "checks": [
+   {
+    "tool": "reschedule_cancel",
+    "called": true,
+    "args": {
+     "new_start_time": "^2026-11-19 15:00:00$"
+    }
+   }
+  ],
+  "mock_overrides": {
+   "lookup_caller": {
+    "status": "returning_patient",
+    "name": "Rohan Mehta",
+    "doctor": "Dr. Rajendra Prasad",
+    "branch": "Koramangala",
+    "upcoming_appointments": [
+     {
+      "doctor": "Dr. Rajendra Prasad",
+      "branch": "Koramangala",
+      "time": "2026-11-18 15:00:00"
+     }
+    ],
+    "dropped_call_context": null
+   }
+  },
+  "split": "train",
+  "_file": "cases/universal/core.json"
+ },
+ "mode": "voice",
+ "turns": [
+  {
+   "i": 0,
+   "role": "agent",
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?",
+   "t": 3.37,
+   "interrupted": false
+  },
+  {
+   "i": 1,
+   "role": "customer",
+   "text": "Hi Maya, I need to reschedule my upcoming appointment please.",
+   "t": 7.88,
+   "interrupted": false
+  },
+  {
+   "i": 2,
+   "role": "agent",
+   "text": "What new date and time would you like to move your appointment to?",
+   "t": 21.54,
+   "interrupted": false,
+   "tools": [
+    "lookup_caller"
+   ]
+  },
+  {
+   "i": 3,
+   "role": "customer",
+   "text": "Can we move it to Wednesday at three in the afternoon?",
+   "t": 26.94,
+   "interrupted": false
+  },
+  {
+   "i": 4,
+   "role": "agent",
+   "text": "I've rescheduled your appointment with Dr. Rajendra Prasad at Koramangala to tomorrow at three in the afternoon. Is there anything else I can help with?",
+   "t": 34.71,
+   "interrupted": false,
+   "tools": [
+    "check_availability",
+    "reschedule_cancel"
+   ]
+  },
+  {
+   "i": 5,
+   "role": "customer",
+   "text": "Sorry, I mean Thursday, not Wednesday.",
+   "t": 45.82,
+   "interrupted": false
+  },
+  {
+   "i": 6,
+   "role": "agent",
+   "text": "I've moved your appointment to Thursday at three in the afternoon. Is there anything else I can help with?",
+   "t": 61.5,
+   "interrupted": false,
+   "tools": [
+    "check_availability",
+    "reschedule_cancel"
+   ]
+  },
+  {
+   "i": 7,
+   "role": "customer",
+   "text": "That is all I needed, thank you so much for your help. Goodbye.",
+   "t": 68.93,
+   "interrupted": false
+  },
+  {
+   "i": 8,
+   "role": "agent",
+   "text": "Thank you for calling Apollo Clinic. Have a wonderful day!",
+   "t": 75.8,
+   "interrupted": false
+  }
+ ],
+ "tool_calls": [
+  {
+   "turn": 2,
+   "name": "lookup_caller",
+   "args": {
+    "patient_phone": "9876543210"
+   },
+   "result": {
+    "status": "returning_patient",
+    "name": "Rohan Mehta",
+    "doctor": "Dr. Rajendra Prasad",
+    "branch": "Koramangala",
+    "upcoming_appointments": [
+     {
+      "doctor": "Dr. Rajendra Prasad",
+      "branch": "Koramangala",
+      "time": "2026-11-18 15:00:00"
+     }
+    ],
+    "dropped_call_context": null
+   },
+   "t": 21.54
+  },
+  {
+   "turn": 4,
+   "name": "check_availability",
+   "args": {
+    "patient_phone": "9876543210",
+    "time_preference": "15:00",
+    "branch_name": "Koramangala",
+    "date": "2026-11-18",
+    "practitioner_name": "Dr. Rajendra Prasad"
+   },
+   "result": {
+    "status": "available",
+    "slots": [
+     "10:00",
+     "10:30",
+     "11:00",
+     "14:00",
+     "15:00",
+     "16:00"
+    ],
+    "message": ""
+   },
+   "t": 32.36
+  },
+  {
+   "turn": 4,
+   "name": "reschedule_cancel",
+   "args": {
+    "patient_name": "Rohan Mehta",
+    "patient_phone": "9876543210",
+    "practitioner_name": "Dr. Rajendra Prasad",
+    "action": "reschedule",
+    "new_start_time": "2026-11-18 15:00:00"
+   },
+   "result": {
+    "status": "success",
+    "message": "Appointment updated"
+   },
+   "t": 34.7
+  },
+  {
+   "turn": 6,
+   "name": "check_availability",
+   "args": {
+    "date": "2026-11-19",
+    "patient_phone": "9876543210",
+    "time_preference": "15:00",
+    "branch_name": "Koramangala",
+    "practitioner_name": "Dr. Rajendra Prasad"
+   },
+   "result": {
+    "status": "available",
+    "slots": [
+     "10:00",
+     "10:30",
+     "11:00",
+     "14:00",
+     "15:00",
+     "16:00"
+    ],
+    "message": ""
+   },
+   "t": 55.35
+  },
+  {
+   "turn": 6,
+   "name": "reschedule_cancel",
+   "args": {
+    "practitioner_name": "Dr. Rajendra Prasad",
+    "action": "reschedule",
+    "patient_phone": "9876543210",
+    "new_start_time": "2026-11-19 15:00:00",
+    "patient_name": "Rohan Mehta"
+   },
+   "result": {
+    "status": "success",
+    "message": "Appointment updated"
+   },
+   "t": 61.49
+  }
+ ],
+ "heard": [
+  {
+   "by": "customer",
+   "t": 7.84,
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?"
+  },
+  {
+   "by": "agent",
+   "t": 16.34,
+   "text": "Hi Maya, I need to reschedule my upcoming appointment please."
+  },
+  {
+   "by": "customer",
+   "t": 26.94,
+   "text": "What new date and time would you like to move your appointment to?"
+  },
+  {
+   "by": "agent",
+   "t": 31.0,
+   "text": "Can we move it to Wednesday at 3 in the afternoon?"
+  },
+  {
+   "by": "customer",
+   "t": 45.81,
+   "text": "I've rescheduled your appointment with Dr. Rajendra Prasad at Kormengala to tomorrow at 3 in the afternoon. Is there anything else I can help with?"
+  },
+  {
+   "by": "agent",
+   "t": 54.11,
+   "text": "Sorry, I mean Thursday, not Wednesday."
+  },
+  {
+   "by": "customer",
+   "t": 68.92,
+   "text": "I've moved your appointment to Thursday at 3 in the afternoon. Is there anything else I can help with?"
+  },
+  {
+   "by": "agent",
+   "t": 75.79,
+   "text": "That is all I needed. Thank you so much for your help. Goodbye."
+  },
+  {
+   "by": "customer",
+   "t": 82.24,
+   "text": "Thank you for calling Apollo Clinic, have a wonderful day."
+  }
+ ],
+ "ended": "room_closed",
+ "error": null,
+ "usage": {},
+ "t0": 1794834243.2696605,
+ "analysis": {
+  "latency_s": [
+   6.95,
+   5.8,
+   8.95,
+   2.92
+  ],
+  "talk_over_s": 0,
+  "flags": [
+   {
+    "type": "slow_response",
+    "t": 15.98,
+    "detail": "6.95s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 30.78,
+    "detail": "5.8s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 53.88,
+    "detail": "8.95s from end of caller speech to agent speech"
+   },
+   {
+    "type": "repeat",
+    "turn": 6,
+    "detail": "repeats an earlier agent sentence: Is there anything else I can help with?"
+   },
+   {
+    "type": "dead_air",
+    "t": 15.98,
+    "detail": "6.9s with nobody speaking"
+   },
+   {
+    "type": "dead_air",
+    "t": 44.93,
+    "detail": "6.2s with nobody speaking"
+   },
+   {
+    "type": "dead_air",
+    "t": 53.88,
+    "detail": "9.0s with nobody speaking"
+   }
+  ],
+  "stt_mismatches": [
+   {
+    "speaker": "customer",
+    "turn": 3,
+    "said": "Can we move it to Wednesday at three in the afternoon?",
+    "heard": "Can we move it to Wednesday at 3 in the afternoon?",
+    "word_swaps": [
+     [
+      "three",
+      "3"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 4,
+    "said": "I've rescheduled your appointment with Dr. Rajendra Prasad at Koramangala to tomorrow at t",
+    "heard": "I've rescheduled your appointment with Dr. Rajendra Prasad at Kormengala to tomorrow at 3 ",
+    "word_swaps": [
+     [
+      "koramangala",
+      "kormengala"
+     ],
+     [
+      "three",
+      "3"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 6,
+    "said": "I've moved your appointment to Thursday at three in the afternoon. Is there anything else ",
+    "heard": "I've moved your appointment to Thursday at 3 in the afternoon. Is there anything else I ca",
+    "word_swaps": [
+     [
+      "three",
+      "3"
+     ]
+    ]
+   }
+  ]
+ }
+}

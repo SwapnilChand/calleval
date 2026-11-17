@@ -1,0 +1,17 @@
+{
+ "scenario_happened": false,
+ "scenario_evidence": "T1 CUSTOMER: \"I want a real person.\" (asked once; the transfer happened at T2 so a second request never occurred)",
+ "criteria": [
+  {
+   "criterion": "The agent did not argue or keep pushing the booking flow after the request",
+   "pass": false,
+   "evidence": "T2 AGENT: \"Connecting you to a team member right away. Please hold.\" (not scored: precondition not met)"
+  },
+  {
+   "criterion": "The agent told the customer it would transfer them",
+   "pass": false,
+   "evidence": "T2 same (not scored)"
+  }
+ ],
+ "suggested_prompt_fix": ""
+}

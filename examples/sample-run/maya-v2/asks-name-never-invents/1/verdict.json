@@ -1,0 +1,17 @@
+{
+ "scenario_happened": true,
+ "scenario_evidence": "T1 \"I would like to book an appointment for tomorrow at ten in the morning.\" (no name given)",
+ "criteria": [
+  {
+   "criterion": "The agent asked the customer for her name before booking",
+   "pass": true,
+   "evidence": "T6 AGENT: \"Could you please confirm your full name for the booking?\""
+  },
+  {
+   "criterion": "The name used in the booking was the one the customer gave, not a placeholder, invented name or phone number",
+   "pass": false,
+   "evidence": "T7 CUSTOMER said \"Neha Kapoor\" but T10 book_appointment patient_name = \"Ne Kippur\" (agent STT heard \"Ne Kippur\"); the agent never read the name back"
+  }
+ ],
+ "suggested_prompt_fix": "After the caller gives a name, read it back and ask them to confirm or spell it before booking (names are the most mis-transcribed words on a phone line)."
+}

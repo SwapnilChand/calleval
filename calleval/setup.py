@@ -1,11 +1,13 @@
 """`calleval doctor` (what works / what is missing) and `calleval setup` (choose a stack, install missing local pieces, write calleval.json)."""
 import json, os, shutil, subprocess, sys, tarfile, tempfile, urllib.request
 from pathlib import Path
-from .core import ROOT, load_env
+from .core import ROOT, config_path, load_env
 
 TOOLS, VOICES = ROOT / ".tools", ROOT / ".tools" / "voices"
 HF = "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/{n}/medium/en_US-{n}-medium.onnx"
 GROQ = {"base_url": "https://api.groq.com/openai/v1", "key_env": "GROQ_API_KEY"}
+CER = {"base_url": "https://api.cerebras.ai/v1", "key_env": "CEREBRAS_API_KEY"}
+OAI = {"base_url": "https://api.openai.com/v1", "key_env": "OPENAI_API_KEY"}
 GEM = {"base_url": "https://generativelanguage.googleapis.com/v1beta/openai/", "key_env": "GEMINI_API_KEY"}
 
 
@@ -14,6 +16,17 @@ def llm(base, model, mt, temp, extra=None):
 
 
 PRESETS = {
+    "cerebras": ("Cerebras gpt-oss-120b for every model (fast, cheap). Speech-to-text runs locally (free). Needs CEREBRAS_API_KEY only.", lambda m: {
+        "agent_llm": llm(CER, "gpt-oss-120b", 900, 0.2, {"reasoning_effort": "low"}),
+        "persona_llm": llm(CER, "gpt-oss-120b", 500, 0.8, {"reasoning_effort": "low"}),
+        "judge_llm": llm(CER, "gpt-oss-120b", 2500, 0, {"reasoning_effort": "medium"}),
+        "voice": {"stt": "local", "stt_model": "base.en"} | {"persona_llm": llm(CER, "gpt-oss-120b", 120, 0.7, {"reasoning_effort": "low"})}}),
+    "openai": ("OpenAI: one key (OPENAI_API_KEY in .env) for language models and speech-to-text; paid, but pennies per conversation.", lambda m: {
+        "agent_llm": llm(OAI, "gpt-4o-mini", 700, 0.2),
+        "persona_llm": llm(OAI, "gpt-4o-mini", 400, 0.8),
+        "judge_llm": llm(OAI, "gpt-4.1-mini", 1500, 0),
+        "voice": {"stt": "openai", "stt_model": "whisper-1", "stt_base_url": "https://api.openai.com/v1", "stt_key_env": "OPENAI_API_KEY",
+                  "persona_llm": llm(OAI, "gpt-4o-mini", 80, 0.7)}}),
     "local": ("Everything on this machine, no keys: Ollama LLM, faster-whisper STT, Piper TTS. Slowest and weakest models.", lambda m: {
         "agent_llm": llm({"base_url": "http://127.0.0.1:11434/v1", "key_env": ""}, m, 700, 0.2),
         "persona_llm": llm({"base_url": "http://127.0.0.1:11434/v1", "key_env": ""}, m, 400, 0.8),
@@ -24,6 +37,15 @@ PRESETS = {
         "judge_llm": llm(GROQ, "openai/gpt-oss-120b", 1500, 0, {"reasoning_effort": "medium"}),
         "voice": {"stt": "groq", "stt_model": "whisper-large-v3-turbo", "persona_llm": llm(GEM, "gemini-3.5-flash-lite", 80, 0.7)}}),
 }
+
+
+def suggest_preset():
+    """Best stack for the keys found in the environment / .env."""
+    e = os.environ
+    if e.get("CEREBRAS_API_KEY"): return "cerebras"
+    if e.get("GEMINI_API_KEY") and e.get("GROQ_API_KEY"): return "free-keys"
+    if e.get("OPENAI_API_KEY"): return "openai"
+    return "local"
 
 
 def rel(p):
@@ -71,8 +93,9 @@ def checks(cfg):
              ("voice:piper", has_py("piper") and (VOICES / f"{v['twin_voice']}.onnx").exists() and (VOICES / f"{v['persona_voice']}.onnx").exists(), "local voices downloaded (Piper, one per speaker)", "run `calleval setup --install voice`")]
     if v["stt"] == "local":
         voice.append(("voice:stt", has_py("faster_whisper"), "local speech-to-text installed (faster-whisper)", "run `calleval setup --install voice`"))
-    elif v["stt"] == "groq":
-        voice.append(("voice:stt-key", bool(ev.get(v.get("stt_key_env", "GROQ_API_KEY"))), "GROQ_API_KEY is set (hosted speech-to-text)", "add GROQ_API_KEY=... to .env"))
+    elif v["stt"] in ("groq", "openai"):
+        kn = v.get("stt_key_env", "GROQ_API_KEY")
+        voice.append((f"voice:stt-key:{kn}", bool(ev.get(kn)), f"{kn} is set (hosted speech-to-text)", f"add {kn}=... to .env"))
     seen, uniq = set(), []
     for r in rows:
         if r[0] not in seen:
@@ -164,7 +187,7 @@ def ask(q, default="y", yes=False):
 def setup(a):
     from .core import load_config
     load_env()
-    cfgp = ROOT / "calleval.json"
+    cfgp = config_path()
     preset = a.preset
     if not preset and sys.stdin.isatty():
         from . import ui
@@ -172,7 +195,7 @@ def setup(a):
         for k, (d, _) in PRESETS.items():
             print(f"  {ui.c(k.ljust(10), 'bold')} {d}")
         preset = input("preset [local]: ").strip() or "local"
-    preset = preset or "local"
+    preset = preset or suggest_preset()
     new = PRESETS[preset][1](a.llm_model)
     cur = json.loads(cfgp.read_text()) if cfgp.exists() else {}
     cur.update({k: v for k, v in new.items() if k != "voice"})

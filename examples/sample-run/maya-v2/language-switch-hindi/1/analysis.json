@@ -1,0 +1,224 @@
+{
+ "latency_s": [
+  7.83,
+  3.34,
+  3.15,
+  2.1,
+  1.96,
+  2.84
+ ],
+ "talk_over_s": 0,
+ "flags": [
+  {
+   "type": "slow_response",
+   "t": 14.02,
+   "detail": "7.83s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 37.82,
+   "detail": "3.34s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 48.02,
+   "detail": "3.15s from end of caller speech to agent speech"
+  },
+  {
+   "type": "repeat",
+   "turn": 12,
+   "detail": "repeats an earlier agent sentence: Thank you for calling Apollo Clinic."
+  },
+  {
+   "type": "dead_air",
+   "t": 14.02,
+   "detail": "7.8s with nobody speaking"
+  }
+ ],
+ "stt_mismatches": [
+  {
+   "speaker": "customer",
+   "turn": 1,
+   "said": "Hello, I want to book an appointment for tomorrow at ten AM with any doctor.",
+   "heard": "Hello, I want to book an appointment for tomorrow at 10am with any doctor.",
+   "word_swaps": [
+    [
+     "ten",
+     "10am"
+    ]
+   ]
+  },
+  {
+   "speaker": "customer",
+   "turn": 3,
+   "said": "haan, koi bhi chalega, bas kal subah dus baje ka time chahiye.",
+   "heard": "Han, Koi Bai Chailga, Bas Kal Suba Dus Bej Kataim Chahiai.",
+   "word_swaps": [
+    [
+     "haan",
+     "han"
+    ],
+    [
+     "bhi",
+     "bai"
+    ],
+    [
+     "chalega",
+     "chailga"
+    ],
+    [
+     "subah",
+     "suba"
+    ],
+    [
+     "baje",
+     "bej"
+    ],
+    [
+     "ka",
+     "kataim"
+    ]
+   ]
+  },
+  {
+   "speaker": "customer",
+   "turn": 5,
+   "said": "mera naam Sunita hai.",
+   "heard": "Mira Nam Sunita Hi",
+   "word_swaps": [
+    [
+     "mera",
+     "mira"
+    ],
+    [
+     "naam",
+     "nam"
+    ],
+    [
+     "hai",
+     "hi"
+    ]
+   ]
+  },
+  {
+   "speaker": "customer",
+   "turn": 7,
+   "said": "haan, theek hai, wohi book kar do.",
+   "heard": "Han, thik hai, wo hai buk kardu.",
+   "word_swaps": [
+    [
+     "haan",
+     "han"
+    ],
+    [
+     "theek",
+     "thik"
+    ],
+    [
+     "wohi",
+     "wo"
+    ],
+    [
+     "book",
+     "hai"
+    ],
+    [
+     "kar",
+     "buk"
+    ],
+    [
+     "do",
+     "kardu"
+    ]
+   ]
+  },
+  {
+   "speaker": "customer",
+   "turn": 9,
+   "said": "bas itna hi chahiye tha, shukriya. bye.",
+   "heard": "Bas it nahai chahi aitha, shakriya bye.",
+   "word_swaps": [
+    [
+     "itna",
+     "it"
+    ],
+    [
+     "hi",
+     "nahai"
+    ],
+    [
+     "chahiye",
+     "chahi"
+    ],
+    [
+     "tha",
+     "aitha"
+    ],
+    [
+     "shukriya",
+     "shakriya"
+    ]
+   ]
+  },
+  {
+   "speaker": "customer",
+   "turn": 11,
+   "said": "akhri baar shukriya, bye.",
+   "heard": "Akribar Shukriya, bye!",
+   "word_swaps": [
+    [
+     "akhri",
+     "akribar"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 2,
+   "said": "We have Dr. Rajendra Prasad for General Medicine and Dr. Akram Syed for Pediatrics. Whom w",
+   "heard": "We have Dr. Rajendra Prasad for General Medicine and Dr. Akram Sid for Pediatrics. Whom wo",
+   "word_swaps": [
+    [
+     "syed",
+     "sid"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 6,
+   "said": "I have ten in the morning tomorrow at Koramangala with Dr. Akram Syed. Shall I lock it in?",
+   "heard": "I have ten in the morning tomorrow at Coramingala with Dr. Akram Sid. Shall I lock it in?",
+   "word_swaps": [
+    [
+     "koramangala",
+     "coramingala"
+    ],
+    [
+     "syed",
+     "sid"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 8,
+   "said": "Your appointment is confirmed for tomorrow at ten in the morning at Koramangala with Dr. A",
+   "heard": "Your appointment is confirmed for tomorrow at 10 in the morning at Kormankala with Dr. Akr",
+   "word_swaps": [
+    [
+     "ten",
+     "10"
+    ],
+    [
+     "koramangala",
+     "kormankala"
+    ],
+    [
+     "syed",
+     "sid"
+    ]
+   ]
+  }
+ ]
+}

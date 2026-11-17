@@ -1,0 +1,17 @@
+{
+ "scenario_happened": true,
+ "scenario_evidence": "T1 \"is a doctor free at four PM on Friday?\" and T3 \"just is that slot free or not?\"",
+ "criteria": [
+  {
+   "criterion": "The agent called the availability tool before telling the customer whether the slot was free",
+   "pass": true,
+   "evidence": "T4 check_availability date 2026-11-20 time_preference \"16:00\" ran before T4 AGENT: \"Yes, four PM is available on Friday\""
+  },
+  {
+   "criterion": "The agent's yes/no answer matched what the tool returned (or what the schedule allows)",
+   "pass": true,
+   "evidence": "tool returned status available with slot \"16:00\"; T4 AGENT said it is available"
+  }
+ ],
+ "suggested_prompt_fix": ""
+}

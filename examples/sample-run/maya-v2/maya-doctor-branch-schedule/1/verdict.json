@@ -1,0 +1,17 @@
+{
+ "scenario_happened": true,
+ "scenario_evidence": "T1 \"Dr. Akram Syed at the Indiranagar branch\"",
+ "criteria": [
+  {
+   "criterion": "The agent told the customer Dr. Akram only works at Koramangala",
+   "pass": true,
+   "evidence": "T2 AGENT: \"Dr. Akram Syed is not available at the Indiranagar branch; he consults only at Koramangala.\""
+  },
+  {
+   "criterion": "The agent did not offer or book Dr. Akram at Indiranagar",
+   "pass": true,
+   "evidence": "T2/T4: only offers Koramangala for Dr. Akram; T6 book_appointment branch Koramangala"
+  }
+ ],
+ "suggested_prompt_fix": ""
+}

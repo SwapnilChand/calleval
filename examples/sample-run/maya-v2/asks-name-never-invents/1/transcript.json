@@ -1,0 +1,357 @@
+{
+ "agent": "maya",
+ "version": "v2",
+ "run": 1,
+ "case": {
+  "id": "asks-name-never-invents",
+  "title": "Agent collects the caller's real name; never invents or substitutes one",
+  "source": "calleval + agent prompts that forbid 'Unknown' names; found in the first real runs (booked as 'John Doe' and as the phone number)",
+  "persona": "Neha Kapoor, new caller, answers only what is asked",
+  "goal": "Book an appointment tomorrow at 10 AM, any doctor and branch",
+  "quirks": [
+   "Do NOT volunteer your name. Give your name 'Neha Kapoor' only if the agent asks for it"
+  ],
+  "precondition": "Customer did not volunteer her name before being asked.",
+  "criteria": [
+   "The agent asked the customer for her name before booking",
+   "The name used in the booking was the one the customer gave, not a placeholder, invented name or phone number"
+  ],
+  "checks": [
+   {
+    "tool": "book_appointment",
+    "called": true,
+    "args": {
+     "patient_name": "^(?!(?i:unknown|john doe|test)$)[A-Za-z]{2,}( [A-Za-z]+)+$"
+    }
+   }
+  ],
+  "split": "train",
+  "_file": "cases/universal/core.json"
+ },
+ "mode": "voice",
+ "turns": [
+  {
+   "i": 0,
+   "role": "agent",
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?",
+   "t": 2.15,
+   "interrupted": false
+  },
+  {
+   "i": 1,
+   "role": "customer",
+   "text": "I would like to book an appointment for tomorrow at ten in the morning.",
+   "t": 6.69,
+   "interrupted": false
+  },
+  {
+   "i": 2,
+   "role": "agent",
+   "text": "We have Dr. Prasad for General Medicine and Dr. Syed for Pediatrics. Whom would you like to see?",
+   "t": 13.0,
+   "interrupted": false,
+   "tools": [
+    "lookup_caller"
+   ]
+  },
+  {
+   "i": 3,
+   "role": "customer",
+   "text": "Either doctor is fine.",
+   "t": 21.98,
+   "interrupted": false
+  },
+  {
+   "i": 4,
+   "role": "agent",
+   "text": "We have branches in Indiranagar and Koramangala. Which one works for you?",
+   "t": 25.31,
+   "interrupted": false
+  },
+  {
+   "i": 5,
+   "role": "customer",
+   "text": "Induriniger works.",
+   "t": 31.72,
+   "interrupted": false
+  },
+  {
+   "i": 6,
+   "role": "agent",
+   "text": "Could you please confirm your full name for the booking?",
+   "t": 37.01,
+   "interrupted": false,
+   "tools": [
+    "check_availability"
+   ]
+  },
+  {
+   "i": 7,
+   "role": "customer",
+   "text": "Neha Kapoor.",
+   "t": 41.51,
+   "interrupted": false
+  },
+  {
+   "i": 8,
+   "role": "agent",
+   "text": "I have 10 AM tomorrow at Indiranagar with Dr. Rajendra Prasad. Shall I lock it in?",
+   "t": 44.04,
+   "interrupted": false
+  },
+  {
+   "i": 9,
+   "role": "customer",
+   "text": "Yes, please lock it in.",
+   "t": 51.6,
+   "interrupted": false
+  },
+  {
+   "i": 10,
+   "role": "agent",
+   "text": "Your appointment is successfully booked. Is there anything else I can help with?",
+   "t": 56.36,
+   "interrupted": false,
+   "tools": [
+    "book_appointment"
+   ]
+  },
+  {
+   "i": 11,
+   "role": "customer",
+   "text": "No,",
+   "t": 64.32,
+   "interrupted": true
+  }
+ ],
+ "tool_calls": [
+  {
+   "turn": 2,
+   "name": "lookup_caller",
+   "args": {
+    "patient_phone": "9876543210"
+   },
+   "result": {
+    "status": "new_caller",
+    "name": null,
+    "names": [],
+    "doctor": null,
+    "branch": null,
+    "upcoming_appointments": [],
+    "dropped_call_context": null
+   },
+   "t": 12.98
+  },
+  {
+   "turn": 6,
+   "name": "check_availability",
+   "args": {
+    "time_preference": "10:00",
+    "patient_phone": "9876543210",
+    "practitioner_name": "Dr. Rajendra Prasad",
+    "branch_name": "Indiranagar",
+    "date": "2026-11-18"
+   },
+   "result": {
+    "status": "available",
+    "slots": [
+     "10:00",
+     "10:30",
+     "11:00",
+     "14:00",
+     "15:00",
+     "16:00"
+    ],
+    "message": ""
+   },
+   "t": 37.0
+  },
+  {
+   "turn": 10,
+   "name": "book_appointment",
+   "args": {
+    "start_time": "2026-11-18 10:00:00",
+    "patient_phone": "9876543210",
+    "patient_name": "Ne Kippur",
+    "practitioner_name": "Dr. Rajendra Prasad",
+    "branch_name": "Indiranagar"
+   },
+   "result": {
+    "status": "success",
+    "message": "Appointment booked"
+   },
+   "t": 56.35
+  }
+ ],
+ "heard": [
+  {
+   "by": "customer",
+   "t": 6.65,
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?"
+  },
+  {
+   "by": "agent",
+   "t": 11.62,
+   "text": "I would like to book an appointment for tomorrow at 10 in the morning."
+  },
+  {
+   "by": "customer",
+   "t": 21.96,
+   "text": "We have Dr. Prasad for general medicine and Dr. Sid for pediatrics, whom would you like to see?"
+  },
+  {
+   "by": "agent",
+   "t": 25.3,
+   "text": "Either doctor is fine."
+  },
+  {
+   "by": "customer",
+   "t": 31.71,
+   "text": "We have branches in Induriniger and Kormungala. Which one works for you?"
+  },
+  {
+   "by": "agent",
+   "t": 35.61,
+   "text": "Enduring Iger works."
+  },
+  {
+   "by": "customer",
+   "t": 41.49,
+   "text": "Could you please confirm your full name for the booking?"
+  },
+  {
+   "by": "agent",
+   "t": 44.03,
+   "text": "Ne Kippur."
+  },
+  {
+   "by": "customer",
+   "t": 51.59,
+   "text": "I have 10 a.m. tomorrow at Endurinagar with Dr. Rajendra Prasad, shall I lock it in?"
+  },
+  {
+   "by": "agent",
+   "t": 55.14,
+   "text": "Yes please lock it in."
+  },
+  {
+   "by": "customer",
+   "t": 63.35,
+   "text": "Your appointment is successfully booked. Is there anything else I can help with?"
+  },
+  {
+   "by": "agent",
+   "t": 66.09,
+   "text": "No?"
+  }
+ ],
+ "ended": "room_closed",
+ "error": null,
+ "usage": {},
+ "t0": 1794835086.2034938,
+ "analysis": {
+  "latency_s": [
+   3.9,
+   1.56,
+   2.86,
+   1.81,
+   3.49
+  ],
+  "talk_over_s": 0,
+  "flags": [
+   {
+    "type": "slow_response",
+    "t": 11.27,
+    "detail": "3.9s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 54.92,
+    "detail": "3.49s from end of caller speech to agent speech"
+   }
+  ],
+  "stt_mismatches": [
+   {
+    "speaker": "customer",
+    "turn": 1,
+    "said": "I would like to book an appointment for tomorrow at ten in the morning.",
+    "heard": "I would like to book an appointment for tomorrow at 10 in the morning.",
+    "word_swaps": [
+     [
+      "ten",
+      "10"
+     ]
+    ]
+   },
+   {
+    "speaker": "customer",
+    "turn": 5,
+    "said": "Induriniger works.",
+    "heard": "Enduring Iger works.",
+    "word_swaps": [
+     [
+      "induriniger",
+      "enduring"
+     ]
+    ]
+   },
+   {
+    "speaker": "customer",
+    "turn": 7,
+    "said": "Neha Kapoor.",
+    "heard": "Ne Kippur.",
+    "word_swaps": [
+     [
+      "neha",
+      "ne"
+     ],
+     [
+      "kapoor",
+      "kippur"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 2,
+    "said": "We have Dr. Prasad for General Medicine and Dr. Syed for Pediatrics. Whom would you like t",
+    "heard": "We have Dr. Prasad for general medicine and Dr. Sid for pediatrics, whom would you like to",
+    "word_swaps": [
+     [
+      "syed",
+      "sid"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 4,
+    "said": "We have branches in Indiranagar and Koramangala. Which one works for you?",
+    "heard": "We have branches in Induriniger and Kormungala. Which one works for you?",
+    "word_swaps": [
+     [
+      "indiranagar",
+      "induriniger"
+     ],
+     [
+      "koramangala",
+      "kormungala"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 8,
+    "said": "I have 10 AM tomorrow at Indiranagar with Dr. Rajendra Prasad. Shall I lock it in?",
+    "heard": "I have 10 a.m. tomorrow at Endurinagar with Dr. Rajendra Prasad, shall I lock it in?",
+    "word_swaps": [
+     [
+      "indiranagar",
+      "endurinagar"
+     ]
+    ]
+   }
+  ],
+  "spoken_forms": "Hi, this is Maya from Apollo Hospitals. How can I help you? We have doctor Prasad for general medicine and doctor Sid for pediatrics. Whom would you like to see? We have branches in Indiranagar and Kormanagala. Which one works for you? Could you please confirm your full name for the booking? I have ten a.m. tomorrow at Indiranagar with doctor Rajendra Prasad. Shall I lock it in? Your appointment is successfully booked. Is there anything else I can help with?"
+ }
+}

@@ -1,0 +1,391 @@
+{
+ "agent": "maya",
+ "version": "v2",
+ "run": 1,
+ "case": {
+  "id": "maya-doctor-branch-schedule",
+  "title": "Dr. Akram at Indiranagar: must refuse, not check or book",
+  "source": "derived from Maya prompt 'Clinic Facts' (Dr. Akram works Koramangala only)",
+  "persona": "Pooja, mother of a 6-year-old",
+  "goal": "Book Dr. Akram Syed at the Indiranagar branch tomorrow at 10 AM",
+  "quirks": [
+   "Insist on Indiranagar once, then accept Koramangala if offered"
+  ],
+  "precondition": "Customer asked for Dr. Akram specifically at Indiranagar.",
+  "criteria": [
+   "The agent told the customer Dr. Akram only works at Koramangala",
+   "The agent did not offer or book Dr. Akram at Indiranagar"
+  ],
+  "checks": [
+   {
+    "tool": "check_availability",
+    "called": false,
+    "args": {
+     "branch_name": "^Indiranagar$",
+     "practitioner_name": "Akram"
+    }
+   },
+   {
+    "tool": "book_appointment",
+    "called": false,
+    "args": {
+     "branch_name": "^Indiranagar$",
+     "practitioner_name": "Akram"
+    }
+   }
+  ],
+  "split": "train",
+  "_file": "cases/generated/maya/schedule.json"
+ },
+ "mode": "voice",
+ "turns": [
+  {
+   "i": 0,
+   "role": "agent",
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?",
+   "t": 1.88,
+   "interrupted": false
+  },
+  {
+   "i": 1,
+   "role": "customer",
+   "text": "Hi, I want to book Dr. Akram Syed at the Indiranagar branch tomorrow at ten in the morning.",
+   "t": 6.57,
+   "interrupted": false
+  },
+  {
+   "i": 2,
+   "role": "agent",
+   "text": "Dr. Akram Syed is not available at the Indiranagar branch; he consults only at Koramangala. Would you like to book for tomorrow at ten in the morning at Koramangala instead?",
+   "t": 26.16,
+   "interrupted": false,
+   "tools": [
+    "lookup_caller",
+    "check_availability"
+   ]
+  },
+  {
+   "i": 3,
+   "role": "customer",
+   "text": "Oh, alright then, let's just do Koramangala tomorrow at ten.",
+   "t": 44.65,
+   "interrupted": false
+  },
+  {
+   "i": 4,
+   "role": "agent",
+   "text": "Could you confirm your full name for the booking?",
+   "t": 54.09,
+   "interrupted": false,
+   "tools": [
+    "check_availability"
+   ]
+  },
+  {
+   "i": 5,
+   "role": "customer",
+   "text": "My name is Pooja.",
+   "t": 58.58,
+   "interrupted": false
+  },
+  {
+   "i": 6,
+   "role": "agent",
+   "text": "I have you booked for ten in the morning tomorrow at Koramangala with Dr. Akram Syed. Is there anything else I can help with?",
+   "t": 67.51,
+   "interrupted": false,
+   "tools": [
+    "book_appointment"
+   ]
+  },
+  {
+   "i": 7,
+   "role": "customer",
+   "text": "No, that is everything. Thank you so much, goodbye!",
+   "t": 79.24,
+   "interrupted": false
+  },
+  {
+   "i": 8,
+   "role": "agent",
+   "text": "Thank you for calling Apollo Clinic. Have a wonderful day!",
+   "t": 89.84,
+   "interrupted": false
+  }
+ ],
+ "tool_calls": [
+  {
+   "turn": 2,
+   "name": "lookup_caller",
+   "args": {
+    "patient_phone": "9876543210"
+   },
+   "result": {
+    "status": "new_caller",
+    "name": null,
+    "names": [],
+    "doctor": null,
+    "branch": null,
+    "upcoming_appointments": [],
+    "dropped_call_context": null
+   },
+   "t": 19.76
+  },
+  {
+   "turn": 2,
+   "name": "check_availability",
+   "args": {
+    "date": "2026-11-18",
+    "branch_name": "Indiranagar",
+    "practitioner_name": "Dr. Akram Syed",
+    "patient_phone": "9876543210",
+    "time_preference": "10:00"
+   },
+   "result": {
+    "status": "available",
+    "slots": [
+     "10:00",
+     "10:30",
+     "11:00",
+     "14:00",
+     "15:00",
+     "16:00"
+    ],
+    "message": ""
+   },
+   "t": 26.14
+  },
+  {
+   "turn": 4,
+   "name": "check_availability",
+   "args": {
+    "date": "2026-11-18",
+    "practitioner_name": "Dr. Akram Syed",
+    "branch_name": "Koramangala",
+    "time_preference": "10:00",
+    "patient_phone": "9876543210"
+   },
+   "result": {
+    "status": "available",
+    "slots": [
+     "10:00",
+     "10:30",
+     "11:00",
+     "14:00",
+     "15:00",
+     "16:00"
+    ],
+    "message": ""
+   },
+   "t": 54.08
+  },
+  {
+   "turn": 6,
+   "name": "book_appointment",
+   "args": {
+    "patient_phone": "9876543210",
+    "patient_name": "Pooja",
+    "branch_name": "Koramangala",
+    "start_time": "2026-11-18 10:00:00",
+    "practitioner_name": "Dr. Akram Syed"
+   },
+   "result": {
+    "status": "success",
+    "message": "Appointment booked"
+   },
+   "t": 67.49
+  }
+ ],
+ "heard": [
+  {
+   "by": "customer",
+   "t": 6.52,
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?"
+  },
+  {
+   "by": "agent",
+   "t": 17.36,
+   "text": "Hi, I want to book Dr. Akram sit at the Endurna Group branch tomorrow at 10 in the morning."
+  },
+  {
+   "by": "customer",
+   "t": 44.64,
+   "text": "Doctor, Akram Sid is not available at the Indoranagar branch. He consults only at Koromengala. Would you like to book for tomorrow at 10 in the morning at Koromengala instead?"
+  },
+  {
+   "by": "agent",
+   "t": 52.68,
+   "text": "Oh, alright then, let's just do Coramengala tomorrow at 10."
+  },
+  {
+   "by": "customer",
+   "t": 58.58,
+   "text": "Could you confirm your full name for the booking?"
+  },
+  {
+   "by": "agent",
+   "t": 63.82,
+   "text": "My name is Pooja."
+  },
+  {
+   "by": "customer",
+   "t": 79.23,
+   "text": "I have you booked for 10 in the morning tomorrow at Koromingala with Dr. Akram Sid. Is there anything else I can help with?"
+  },
+  {
+   "by": "agent",
+   "t": 89.82,
+   "text": "No, that is everything. Thank you so much. Goodbye."
+  },
+  {
+   "by": "customer",
+   "t": 97.36,
+   "text": "Thank you for calling Apollo Clinic. Have a wonderful day."
+  }
+ ],
+ "ended": "room_closed",
+ "error": null,
+ "usage": {},
+ "t0": 1794834137.0355358,
+ "analysis": {
+  "latency_s": [
+   16.42,
+   3.06,
+   7.88,
+   3.84
+  ],
+  "talk_over_s": 0,
+  "flags": [
+   {
+    "type": "slow_response",
+    "t": 16.97,
+    "detail": "16.42s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 52.42,
+    "detail": "3.06s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 63.57,
+    "detail": "7.88s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 89.58,
+    "detail": "3.84s from end of caller speech to agent speech"
+   },
+   {
+    "type": "dead_air",
+    "t": 5.61,
+    "detail": "6.1s with nobody speaking"
+   },
+   {
+    "type": "dead_air",
+    "t": 16.97,
+    "detail": "16.4s with nobody speaking"
+   },
+   {
+    "type": "dead_air",
+    "t": 63.57,
+    "detail": "7.9s with nobody speaking"
+   },
+   {
+    "type": "dead_air",
+    "t": 78.36,
+    "detail": "8.0s with nobody speaking"
+   }
+  ],
+  "stt_mismatches": [
+   {
+    "speaker": "customer",
+    "turn": 1,
+    "said": "Hi, I want to book Dr. Akram Syed at the Indiranagar branch tomorrow at ten in the morning",
+    "heard": "Hi, I want to book Dr. Akram sit at the Endurna Group branch tomorrow at 10 in the morning",
+    "word_swaps": [
+     [
+      "syed",
+      "sit"
+     ],
+     [
+      "indiranagar",
+      "endurna"
+     ],
+     [
+      "ten",
+      "10"
+     ]
+    ]
+   },
+   {
+    "speaker": "customer",
+    "turn": 3,
+    "said": "Oh, alright then, let's just do Koramangala tomorrow at ten.",
+    "heard": "Oh, alright then, let's just do Coramengala tomorrow at 10.",
+    "word_swaps": [
+     [
+      "koramangala",
+      "coramengala"
+     ],
+     [
+      "ten",
+      "10"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 2,
+    "said": "Dr. Akram Syed is not available at the Indiranagar branch; he consults only at Koramangala",
+    "heard": "Doctor, Akram Sid is not available at the Indoranagar branch. He consults only at Koromeng",
+    "word_swaps": [
+     [
+      "dr",
+      "doctor"
+     ],
+     [
+      "syed",
+      "sid"
+     ],
+     [
+      "indiranagar",
+      "indoranagar"
+     ],
+     [
+      "koramangala",
+      "koromengala"
+     ],
+     [
+      "ten",
+      "10"
+     ],
+     [
+      "koramangala",
+      "koromengala"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 6,
+    "said": "I have you booked for ten in the morning tomorrow at Koramangala with Dr. Akram Syed. Is t",
+    "heard": "I have you booked for 10 in the morning tomorrow at Koromingala with Dr. Akram Sid. Is the",
+    "word_swaps": [
+     [
+      "ten",
+      "10"
+     ],
+     [
+      "koramangala",
+      "koromingala"
+     ],
+     [
+      "syed",
+      "sid"
+     ]
+    ]
+   }
+  ]
+ }
+}

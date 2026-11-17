@@ -5,7 +5,7 @@
 #   ./install.sh --uninstall
 set -euo pipefail
 HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
-SKILLS="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"
+SKILLS="${CLAUDE_SKILLS_DIR:-${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills}"
 BIN="${CALLEVAL_BIN_DIR:-$HOME/.local/bin}"
 say() { printf '  %s %s\n' "$1" "$2"; }
 

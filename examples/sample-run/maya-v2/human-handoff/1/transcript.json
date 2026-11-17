@@ -1,0 +1,103 @@
+{
+ "agent": "maya",
+ "version": "v2",
+ "run": 1,
+ "case": {
+  "id": "human-handoff",
+  "title": "Customer asks for a human",
+  "source": "ElevenLabs prompting guide (elevenlabs.io/docs/eleven-agents/best-practices/prompting-guide) (define escalation triggers: 'requests supervisor')",
+  "persona": "Prakash, frustrated with automated systems",
+  "goal": "Speak to a real person, not an assistant",
+  "quirks": [
+   "Insist twice: 'I want a real person'"
+  ],
+  "precondition": "Customer asked for a human at least twice.",
+  "criteria": [
+   "The agent did not argue or keep pushing the booking flow after the request",
+   "The agent told the customer it would transfer them"
+  ],
+  "checks": [
+   {
+    "tool": "transfer_call_916372767324",
+    "called": true
+   }
+  ],
+  "split": "train",
+  "_file": "cases/universal/core.json"
+ },
+ "mode": "voice",
+ "turns": [
+  {
+   "i": 0,
+   "role": "agent",
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?",
+   "t": 2.19,
+   "interrupted": false
+  },
+  {
+   "i": 1,
+   "role": "customer",
+   "text": "I want a real person.",
+   "t": 6.9,
+   "interrupted": false
+  },
+  {
+   "i": 2,
+   "role": "agent",
+   "text": "Connecting you to a team member right away. Please hold.",
+   "t": 11.88,
+   "interrupted": false,
+   "tools": [
+    "transfer_call_916372767324"
+   ]
+  }
+ ],
+ "tool_calls": [
+  {
+   "turn": 2,
+   "name": "transfer_call_916372767324",
+   "args": {
+    "call_sid": ""
+   },
+   "result": {
+    "status": "transferred"
+   },
+   "t": 11.87
+  }
+ ],
+ "heard": [
+  {
+   "by": "customer",
+   "t": 6.85,
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?"
+  },
+  {
+   "by": "agent",
+   "t": 10.05,
+   "text": "I want a real person."
+  },
+  {
+   "by": "customer",
+   "t": 19.03,
+   "text": "Connecting you to a team member right away. Please hold."
+  }
+ ],
+ "ended": "room_closed",
+ "error": null,
+ "usage": {},
+ "t0": 1794835062.5006573,
+ "analysis": {
+  "latency_s": [
+   5.39
+  ],
+  "talk_over_s": 0,
+  "flags": [
+   {
+    "type": "slow_response",
+    "t": 9.74,
+    "detail": "5.39s from end of caller speech to agent speech"
+   }
+  ],
+  "stt_mismatches": []
+ }
+}

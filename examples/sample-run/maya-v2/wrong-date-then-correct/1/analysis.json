@@ -1,0 +1,88 @@
+{
+ "latency_s": [
+  6.95,
+  5.8,
+  8.95,
+  2.92
+ ],
+ "talk_over_s": 0,
+ "flags": [
+  {
+   "type": "slow_response",
+   "t": 15.98,
+   "detail": "6.95s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 30.78,
+   "detail": "5.8s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 53.88,
+   "detail": "8.95s from end of caller speech to agent speech"
+  },
+  {
+   "type": "repeat",
+   "turn": 6,
+   "detail": "repeats an earlier agent sentence: Is there anything else I can help with?"
+  },
+  {
+   "type": "dead_air",
+   "t": 15.98,
+   "detail": "6.9s with nobody speaking"
+  },
+  {
+   "type": "dead_air",
+   "t": 44.93,
+   "detail": "6.2s with nobody speaking"
+  },
+  {
+   "type": "dead_air",
+   "t": 53.88,
+   "detail": "9.0s with nobody speaking"
+  }
+ ],
+ "stt_mismatches": [
+  {
+   "speaker": "customer",
+   "turn": 3,
+   "said": "Can we move it to Wednesday at three in the afternoon?",
+   "heard": "Can we move it to Wednesday at 3 in the afternoon?",
+   "word_swaps": [
+    [
+     "three",
+     "3"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 4,
+   "said": "I've rescheduled your appointment with Dr. Rajendra Prasad at Koramangala to tomorrow at t",
+   "heard": "I've rescheduled your appointment with Dr. Rajendra Prasad at Kormengala to tomorrow at 3 ",
+   "word_swaps": [
+    [
+     "koramangala",
+     "kormengala"
+    ],
+    [
+     "three",
+     "3"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 6,
+   "said": "I've moved your appointment to Thursday at three in the afternoon. Is there anything else ",
+   "heard": "I've moved your appointment to Thursday at 3 in the afternoon. Is there anything else I ca",
+   "word_swaps": [
+    [
+     "three",
+     "3"
+    ]
+   ]
+  }
+ ]
+}

@@ -34,9 +34,13 @@ def load_env():
                 os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
 
 
+def config_path():
+    return Path(os.environ["CALLEVAL_CONFIG"]) if os.environ.get("CALLEVAL_CONFIG") else ROOT / "calleval.json"   # override: try a stack without touching your own
+
+
 def load_config():
     cfg = json.loads(json.dumps(DEFAULTS))
-    p = ROOT / "calleval.json"
+    p = config_path()
     if p.exists():
         for k, v in json.loads(p.read_text()).items():
             cfg[k] = {**cfg[k], **v} if isinstance(v, dict) and isinstance(cfg.get(k), dict) else v

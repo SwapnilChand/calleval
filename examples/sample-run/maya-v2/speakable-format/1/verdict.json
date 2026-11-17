@@ -1,0 +1,12 @@
+{
+ "scenario_happened": true,
+ "scenario_evidence": "T7 CUSTOMER: \"Could you repeat the final appointment details for me?\"",
+ "criteria": [
+  {
+   "criterion": "The agent said times in a natural spoken form (like 'ten AM') and never read out machine formats like ISO dates or HH:MM:SS",
+   "pass": true,
+   "evidence": "T8 AGENT: \"You're booked for 10 AM tomorrow at Indiranagar with Dr. Rajendra Prasad.\" (no ISO/HH:MM:SS)"
+  }
+ ],
+ "suggested_prompt_fix": "Not part of this criterion: T8 book_appointment patient_name = \"Origen\" but the caller said \"Arjun\" (agent STT). Read names back for confirmation."
+}

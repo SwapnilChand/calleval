@@ -1,0 +1,116 @@
+{
+ "latency_s": [
+  6.58,
+  3.96,
+  1.48,
+  2.93,
+  1.78,
+  1.59
+ ],
+ "talk_over_s": 0,
+ "flags": [
+  {
+   "type": "slow_response",
+   "t": 18.74,
+   "detail": "6.58s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 39.73,
+   "detail": "3.96s from end of caller speech to agent speech"
+  },
+  {
+   "type": "dead_air",
+   "t": 5.54,
+   "detail": "9.2s with nobody speaking"
+  },
+  {
+   "type": "dead_air",
+   "t": 18.74,
+   "detail": "6.6s with nobody speaking"
+  }
+ ],
+ "stt_mismatches": [
+  {
+   "speaker": "customer",
+   "turn": 1,
+   "said": "Hi Maya, I need to book an appointment for tomorrow at ten in the morning, please.",
+   "heard": "Hi Maya, I need to book an appointment for tomorrow at 10 in the morning, please.",
+   "word_swaps": [
+    [
+     "ten",
+     "10"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 2,
+   "said": "We have Dr. Prasad for General Medicine at Indiranagar and Koramangala, and Dr. Syed for P",
+   "heard": "We have Dr. Prasid for General Medicine at Inderniger and Kormengala, and Dr. Sid for Pedi",
+   "word_swaps": [
+    [
+     "prasad",
+     "prasid"
+    ],
+    [
+     "indiranagar",
+     "inderniger"
+    ],
+    [
+     "koramangala",
+     "kormengala"
+    ],
+    [
+     "syed",
+     "sid"
+    ],
+    [
+     "koramangala",
+     "kormengala"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 4,
+   "said": "The earliest available slot I have tomorrow is at 10 AM with Dr. Prasad at Indiranagar. Do",
+   "heard": "The earliest available slot I have tomorrow is at 10 a.m. with Dr. Prasad at Enderniger. D",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "enderniger"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 8,
+   "said": "I have you booked with Dr. Rajendra Prasad at Indiranagar tomorrow at 10 AM. Is there anyt",
+   "heard": "I have you booked with Dr. Rajendra Prasad at Inderniger tomorrow at 10am. Is there anythi",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "inderniger"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 10,
+   "said": "The booking is under Anita Rao.",
+   "heard": "The booking is under a neater row.",
+   "word_swaps": [
+    [
+     "anita",
+     "a"
+    ],
+    [
+     "rao",
+     "neater"
+    ]
+   ]
+  }
+ ],
+ "spoken_forms": "Hi. This is Maya from Apollo Hospitals. How can I help you? We have Doctor Prasad for general medicine at Indiranagar and Koramangala and Doctor Sid for pediatrics at Koramangala. Whom would you like to see? The earliest available slot I have tomorrow is at ten am with Doctor Prasad at Indiranagar. Does that work for you? Could you please confirm your full name for the booking? I have you booked with Doctor Rajendra Prasad at Indiranagar tomorrow at ten am. Is there anything else I can help you with? The booking is under Anita Rao. Thank you for calling Apollo Clinic. Have a wonderful day."
+}

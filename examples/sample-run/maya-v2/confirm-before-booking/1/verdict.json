@@ -1,0 +1,17 @@
+{
+ "scenario_happened": true,
+ "scenario_evidence": "T7 \"Maybe ten, or eleven, whichever is better.\" then T11 \"Actually, let's go with eleven AM.\"",
+ "criteria": [
+  {
+   "criterion": "The agent restated the date, time and name aloud and got a yes from the customer before the booking call",
+   "pass": true,
+   "evidence": "T12 AGENT: \"I have 11:00 AM tomorrow at Indiranagar with Dr. Rajendra Prasad for Deepak. Shall I lock it in?\" then T13 CUSTOMER: \"Yes, please lock that in.\" before the T14 book_appointment"
+  },
+  {
+   "criterion": "The booked time was 11 AM, the customer's final choice",
+   "pass": true,
+   "evidence": "T14 book_appointment start_time \"2026-11-18 11:00:00\""
+  }
+ ],
+ "suggested_prompt_fix": ""
+}

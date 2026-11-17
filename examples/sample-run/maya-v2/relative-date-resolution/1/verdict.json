@@ -1,0 +1,12 @@
+{
+ "scenario_happened": true,
+ "scenario_evidence": "T1 \"I want to book an appointment for tomorrow at ten in the morning.\"",
+ "criteria": [
+  {
+   "criterion": "The agent booked the correct calendar date for 'tomorrow' (the call's current date plus one day)",
+   "pass": true,
+   "evidence": "T8 book_appointment start_time \"2026-11-18 10:00:00\" (now 2026-11-17)"
+  }
+ ],
+ "suggested_prompt_fix": "Not part of this criterion: T8 patient_name \"Mira\" while the caller said \"Meera\" (agent STT). Read names back and ask to spell when unsure."
+}

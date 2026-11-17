@@ -1,0 +1,111 @@
+{
+ "latency_s": [
+  5.29,
+  4.31,
+  2.7,
+  3.4,
+  1.6,
+  1.36
+ ],
+ "talk_over_s": 0,
+ "flags": [
+  {
+   "type": "slow_response",
+   "t": 17.89,
+   "detail": "5.29s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 39.83,
+   "detail": "4.31s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 63.89,
+   "detail": "3.4s from end of caller speech to agent speech"
+  }
+ ],
+ "stt_mismatches": [
+  {
+   "speaker": "customer",
+   "turn": 1,
+   "said": "Hi, I would like to book an appointment for tomorrow at ten in the morning with any availa",
+   "heard": "Hi, I would like to book an appointment for tomorrow at 10 in the morning with any availab",
+   "word_swaps": [
+    [
+     "ten",
+     "10"
+    ]
+   ]
+  },
+  {
+   "speaker": "customer",
+   "turn": 3,
+   "said": "I can take the one in Kormengala with Doctor Akram Sid.",
+   "heard": "I can take the one in Kormungala with Dr. Akram Sid.",
+   "word_swaps": [
+    [
+     "kormengala",
+     "kormungala"
+    ],
+    [
+     "doctor",
+     "dr"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 2,
+   "said": "We have Dr. Rajendra Prasad in Indiranagar and Dr. Akram Syed in Koramangala at 10:00 AM t",
+   "heard": "We have Dr. Rajendra Prasad in Indoranagar and Dr. Akram Sid in Kormengala at 10.00 a.m. t",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "indoranagar"
+    ],
+    [
+     "syed",
+     "sid"
+    ],
+    [
+     "koramangala",
+     "kormengala"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 6,
+   "said": "I have 10:00 AM tomorrow at Koramangala with Dr. Akram Syed for Vikram. Shall I lock it in",
+   "heard": "I have 10.00 a.m. tomorrow at Kormangala with Dr. Akram Sid for Vikram. Shall I lock it in",
+   "word_swaps": [
+    [
+     "koramangala",
+     "kormangala"
+    ],
+    [
+     "syed",
+     "sid"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 8,
+   "said": "I'm sorry, I encountered a brief system issue. Let me try that again. Your appointment wit",
+   "heard": "I'm sorry I encountered a brief system issue. Let me try that again. Your appointment with",
+   "word_swaps": [
+    [
+     "syed",
+     "sid"
+    ],
+    [
+     "koramangala",
+     "koromengala"
+    ]
+   ]
+  }
+ ],
+ "spoken_forms": "Hi. This is Maya from Apollo Hospitals. How can I help you? We have doctor Rajendra Prasad and Indrajit Nagar in doctor Akram Siddin Koramangala at ten zero zero a.m. tomorrow. Which doctor and branch would you prefer? Could you confirm your full name for the booking? I have ten zero zero a.m. tomorrow at Koramangala with doctor Akram Sidd for Vikram. Shall I lock it in? I'm sorry, I encountered a brief system issue. Let me try that again. Your appointment with doctor Akram Sidd at Koramangala tomorrow at ten zero zero a.m. is confirmed. Is there anything else I can help with? Thank you for calling Apollo Clinic. Have a wonderful day. Goodbye."
+}

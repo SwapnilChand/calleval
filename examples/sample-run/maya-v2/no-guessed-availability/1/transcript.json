@@ -1,0 +1,371 @@
+{
+ "agent": "maya",
+ "version": "v2",
+ "run": 1,
+ "case": {
+  "id": "no-guessed-availability",
+  "title": "Availability must come from the tool, not memory",
+  "source": "ElevenLabs prompting guide (elevenlabs.io/docs/eleven-agents/best-practices/prompting-guide) ('never rely on memory or assumptions'); agent prompts typically say 'never guess availability'",
+  "persona": "Kavya, in a hurry",
+  "goal": "Find out whether a doctor is free this Friday at 4 PM and book it if yes",
+  "quirks": [
+   "Ask 'is it free at 4 PM on Friday?' directly and push for a yes or no"
+  ],
+  "precondition": "Customer asked about availability on a specific day and time.",
+  "criteria": [
+   "The agent called the availability tool before telling the customer whether the slot was free",
+   "The agent's yes/no answer matched what the tool returned (or what the schedule allows)"
+  ],
+  "checks": [
+   {
+    "tool": "check_availability",
+    "called": true
+   }
+  ],
+  "split": "train",
+  "_file": "cases/universal/core.json"
+ },
+ "mode": "voice",
+ "turns": [
+  {
+   "i": 0,
+   "role": "agent",
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?",
+   "t": 2.11,
+   "interrupted": false
+  },
+  {
+   "i": 1,
+   "role": "customer",
+   "text": "Hi, is a doctor free at four PM on Friday?",
+   "t": 6.68,
+   "interrupted": false
+  },
+  {
+   "i": 2,
+   "role": "agent",
+   "text": "We have Dr. Akram Syed in Koramangala and Dr. Rajendra Prasad available. Whom would you like to see?",
+   "t": 15.53,
+   "interrupted": false,
+   "tools": [
+    "lookup_caller",
+    "check_availability"
+   ]
+  },
+  {
+   "i": 3,
+   "role": "customer",
+   "text": "Either is fine, just is that slot free or not?",
+   "t": 24.29,
+   "interrupted": false
+  },
+  {
+   "i": 4,
+   "role": "agent",
+   "text": "Yes, four PM is available on Friday with Dr. Akram Syed in Koramangala. Would you like me to book it?",
+   "t": 31.85,
+   "interrupted": false,
+   "tools": [
+    "check_availability"
+   ]
+  },
+  {
+   "i": 5,
+   "role": "customer",
+   "text": "Yes, please book it.",
+   "t": 41.73,
+   "interrupted": false
+  },
+  {
+   "i": 6,
+   "role": "agent",
+   "text": "Could you confirm your full name for the booking?",
+   "t": 44.67,
+   "interrupted": false
+  },
+  {
+   "i": 7,
+   "role": "customer",
+   "text": "My name is Kavya.",
+   "t": 49.09,
+   "interrupted": false
+  },
+  {
+   "i": 8,
+   "role": "agent",
+   "text": "I have booked your appointment for four in the afternoon on Friday, November 20th, at Koramangala with Dr. Akram Syed. Is there anything else I can help with?",
+   "t": 53.42,
+   "interrupted": false,
+   "tools": [
+    "book_appointment"
+   ]
+  },
+  {
+   "i": 9,
+   "role": "customer",
+   "text": "No that is all, bye.",
+   "t": 65.75,
+   "interrupted": false
+  },
+  {
+   "i": 10,
+   "role": "agent",
+   "text": "Thank you for calling Apollo Clinic. Have a wonderful day!",
+   "t": 69.27,
+   "interrupted": false
+  },
+  {
+   "i": 11,
+   "role": "customer",
+   "text": "Bye.",
+   "t": 76.09,
+   "interrupted": false
+  }
+ ],
+ "tool_calls": [
+  {
+   "turn": 2,
+   "name": "lookup_caller",
+   "args": {
+    "patient_phone": "9876543210"
+   },
+   "result": {
+    "status": "new_caller",
+    "name": null,
+    "names": [],
+    "doctor": null,
+    "branch": null,
+    "upcoming_appointments": [],
+    "dropped_call_context": null
+   },
+   "t": 14.17
+  },
+  {
+   "turn": 2,
+   "name": "check_availability",
+   "args": {
+    "patient_phone": "9876543210",
+    "date": "2026-11-20",
+    "time_preference": "16:00"
+   },
+   "result": {
+    "status": "available",
+    "slots": [
+     "10:00",
+     "10:30",
+     "11:00",
+     "14:00",
+     "15:00",
+     "16:00"
+    ],
+    "message": ""
+   },
+   "t": 15.52
+  },
+  {
+   "turn": 4,
+   "name": "check_availability",
+   "args": {
+    "practitioner_name": "Dr. Akram Syed",
+    "date": "2026-11-20",
+    "patient_phone": "9876543210",
+    "time_preference": "16:00",
+    "branch_name": "Koramangala"
+   },
+   "result": {
+    "status": "available",
+    "slots": [
+     "10:00",
+     "10:30",
+     "11:00",
+     "14:00",
+     "15:00",
+     "16:00"
+    ],
+    "message": ""
+   },
+   "t": 31.84
+  },
+  {
+   "turn": 8,
+   "name": "book_appointment",
+   "args": {
+    "patient_phone": "9876543210",
+    "start_time": "2026-11-20 16:00:00",
+    "patient_name": "Kavya",
+    "practitioner_name": "Dr. Akram Syed",
+    "branch_name": "Koramangala"
+   },
+   "result": {
+    "status": "success",
+    "message": "Appointment booked"
+   },
+   "t": 53.41
+  }
+ ],
+ "heard": [
+  {
+   "by": "customer",
+   "t": 6.63,
+   "text": "Hi, this is Maya from Apollo Hospitals, how can I help you?"
+  },
+  {
+   "by": "agent",
+   "t": 12.3,
+   "text": "Hi, is a doctor free at 4pm on Friday?"
+  },
+  {
+   "by": "customer",
+   "t": 24.28,
+   "text": "We have Dr. Akram Sid in Koromengala and Dr. Rajendra Press said available. Whom would you like to see?"
+  },
+  {
+   "by": "agent",
+   "t": 30.58,
+   "text": "Either is fine, just is that slot free or not."
+  },
+  {
+   "by": "customer",
+   "t": 41.72,
+   "text": "Yes, 4 p.m. is available on Friday with Dr. Akram Sid in Koromingala. Would you like me to book it?"
+  },
+  {
+   "by": "agent",
+   "t": 44.65,
+   "text": "Yes, please book it."
+  },
+  {
+   "by": "customer",
+   "t": 49.08,
+   "text": "Could you confirm your full name for the booking?"
+  },
+  {
+   "by": "agent",
+   "t": 52.17,
+   "text": "My name is Kavya."
+  },
+  {
+   "by": "customer",
+   "t": 65.74,
+   "text": "I have booked your appointment for four in the afternoon on Friday, November 20th, at Korman Gala with Dr. Akram Sid. Is there anything else I can help with?"
+  },
+  {
+   "by": "agent",
+   "t": 69.26,
+   "text": "No, that is all. Bye."
+  },
+  {
+   "by": "customer",
+   "t": 74.59,
+   "text": "Thank you for calling Apollo Clinic. Have a wonderful day."
+  },
+  {
+   "by": "agent",
+   "t": 77.84,
+   "text": "Bye."
+  }
+ ],
+ "ended": "room_closed",
+ "error": null,
+ "usage": {},
+ "t0": 1794835208.2565532,
+ "analysis": {
+  "latency_s": [
+   5.08,
+   3.92,
+   1.61,
+   3.72,
+   1.76
+  ],
+  "talk_over_s": 0,
+  "flags": [
+   {
+    "type": "slow_response",
+    "t": 11.95,
+    "detail": "5.08s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 30.35,
+    "detail": "3.92s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 51.95,
+    "detail": "3.72s from end of caller speech to agent speech"
+   }
+  ],
+  "stt_mismatches": [
+   {
+    "speaker": "customer",
+    "turn": 1,
+    "said": "Hi, is a doctor free at four PM on Friday?",
+    "heard": "Hi, is a doctor free at 4pm on Friday?",
+    "word_swaps": [
+     [
+      "four",
+      "4pm"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 2,
+    "said": "We have Dr. Akram Syed in Koramangala and Dr. Rajendra Prasad available. Whom would you li",
+    "heard": "We have Dr. Akram Sid in Koromengala and Dr. Rajendra Press said available. Whom would you",
+    "word_swaps": [
+     [
+      "syed",
+      "sid"
+     ],
+     [
+      "koramangala",
+      "koromengala"
+     ],
+     [
+      "prasad",
+      "press"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 4,
+    "said": "Yes, four PM is available on Friday with Dr. Akram Syed in Koramangala. Would you like me ",
+    "heard": "Yes, 4 p.m. is available on Friday with Dr. Akram Sid in Koromingala. Would you like me to",
+    "word_swaps": [
+     [
+      "four",
+      "4pm"
+     ],
+     [
+      "syed",
+      "sid"
+     ],
+     [
+      "koramangala",
+      "koromingala"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 8,
+    "said": "I have booked your appointment for four in the afternoon on Friday, November 20th, at Kora",
+    "heard": "I have booked your appointment for four in the afternoon on Friday, November 20th, at Korm",
+    "word_swaps": [
+     [
+      "koramangala",
+      "korman"
+     ],
+     [
+      "syed",
+      "sid"
+     ]
+    ]
+   }
+  ],
+  "spoken_forms": "Hi, this is Maya from Apollo Hospitals. How can I help you? We have doctor Akram Sid in Kormangala and doctor Rajendra Prasad available. Whom would you like to see? Yes, four p.m. is available on Friday with doctor Akram Sid in Kormangala. Would you like me to book it? Could you confirm your full name for the booking? I have booked your appointment for four in the afternoon on Friday, November twentieth at Kormangala with doctor Akram Sid. Is there anything else I can help with? Thank you for calling Apollo Clinic. Have a wonderful day."
+ },
+ "attempts": 1
+}

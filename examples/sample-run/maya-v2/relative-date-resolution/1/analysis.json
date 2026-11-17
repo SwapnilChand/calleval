@@ -1,0 +1,113 @@
+{
+ "latency_s": [
+  3.97,
+  4.56,
+  3.23,
+  3.3,
+  1.58,
+  1.96
+ ],
+ "talk_over_s": 0,
+ "flags": [
+  {
+   "type": "slow_response",
+   "t": 12.33,
+   "detail": "3.97s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 28.32,
+   "detail": "4.56s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 49.67,
+   "detail": "3.23s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 58.62,
+   "detail": "3.3s from end of caller speech to agent speech"
+  },
+  {
+   "type": "no_reply_after_tool",
+   "turn": 6,
+   "detail": "check_availability ran but the agent gave no spoken reply before the caller's next turn"
+  }
+ ],
+ "stt_mismatches": [
+  {
+   "speaker": "customer",
+   "turn": 1,
+   "said": "I want to book an appointment for tomorrow at ten in the morning.",
+   "heard": "I want to book an appointment for tomorrow at 10 in the morning.",
+   "word_swaps": [
+    [
+     "ten",
+     "10"
+    ]
+   ]
+  },
+  {
+   "speaker": "customer",
+   "turn": 7,
+   "said": "My name is Meera.",
+   "heard": "My name is Mira.",
+   "word_swaps": [
+    [
+     "meera",
+     "mira"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 2,
+   "said": "We have Dr. Rajendra Prasad for General Medicine and Dr. Akram Syed for Pediatrics. Whom w",
+   "heard": "We have Dr. Rajendra Prasad for General Medicine and Dr. Akram Sid for Pediatrics. Whom wo",
+   "word_swaps": [
+    [
+     "syed",
+     "sid"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 4,
+   "said": "We have slots available at 10:00 AM with Dr. Rajendra Prasad at Indiranagar, or at 10:00 A",
+   "heard": "We have slots available at 10.00 a.m. with Dr. Rogender Prasad at Indurinagar, or at 10.00",
+   "word_swaps": [
+    [
+     "rajendra",
+     "rogender"
+    ],
+    [
+     "indiranagar",
+     "indurinagar"
+    ],
+    [
+     "syed",
+     "sid"
+    ],
+    [
+     "koramangala",
+     "koromangala"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 8,
+   "said": "I have booked your appointment for tomorrow at 10:00 AM at Indiranagar with Dr. Rajendra P",
+   "heard": "I have booked your appointment for tomorrow at 10.00 a.m. at Indurnagar with Dr. Rajendra ",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "indurnagar"
+    ]
+   ]
+  }
+ ],
+ "spoken_forms": "I want to book an appointment for tomorrow at ten in the morning. I don't mind either doctor is fine. Any branch is fine, whichever has the opening. My name is Mira. No, that is all. Thanks. Bye. Goodbye."
+}

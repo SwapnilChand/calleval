@@ -261,6 +261,24 @@ def cmd_improve(a):
             f"calleval run --agent {agent['name']} --version v{res} --split train --run-id try{res}  and the same with --split heldout for both versions")
 
 
+def cmd_demo(a):
+    """Replay a real recorded voice run (Maya v2, 11 cases, judged) so you can see the report with no keys and no setup."""
+    src, dst = ROOT / "examples" / "sample-run", ROOT / "runs" / "demo"
+    if not src.exists():
+        raise UserError("the bundled sample run is missing", "re-clone the repository")
+    ui.header("calleval demo", "a real recorded voice run", "no keys needed")
+    ui.step("copying the sample run to runs/demo (the bundled files stay untouched)")
+    shutil.copytree(src, dst, dirs_exist_ok=True)
+    cmd_report(argparse.Namespace(run_id="demo"))
+    print(ui.c("\n Open the report and click a case: chat view, the evidence turns highlighted, the judge's reasoning, voice analysis,", "dim"))
+    print(ui.c(" and (for asks-name-never-invents) the real call audio. Then try `calleval doctor` to start with your own agent.", "dim"))
+
+
+def cmd_start(a):
+    from .start import run
+    run(a)
+
+
 def cmd_judge(a):
     cfg = load_config()
     base = run_dir_or_die(a.run_id)
@@ -297,6 +315,8 @@ HELP = f"""{ui.c("calleval", "bold", "cyan")} · test a voice agent with simulat
 {ui.c("Usage", "bold")}  calleval <command> [options]      (calleval <command> -h for examples)
 
 {ui.c("Get started", "bold")}
+  start         one guided command: setup check, run, judge, results, report in the browser
+  demo          see a real recorded run and its report, with no keys and no setup
   doctor        check what works and what is missing
   setup         pick a stack (local: no keys, or free-keys) and install the optional voice pieces
   new-agent     add your agent: from scratch, your prompt (+ tools), or a LiveKit agent file
@@ -361,11 +381,20 @@ def build_parser():
     x.add_argument("--agent", required=True, metavar="NAME"); x.add_argument("--version", metavar="vN"); x.add_argument("--n", type=int, default=6, help="how many cases (default 6)")
     x = cmd("improve", "Propose a revised prompt as a new version, from the failed train-split cases of a run (the self-improving loop).", "  calleval improve --agent maya --from vcmp", cmd_improve)
     x.add_argument("--agent", required=True, metavar="NAME"); x.add_argument("--version", metavar="vN", help="default: latest"); x.add_argument("--from", dest="from_run", required=True, metavar="RUN_ID")
+    x = cmd("start", "One guided command: check setup, pick the agent, run, judge, show results, open the report. Status after every stage.",
+            "  calleval start                       # asks what it needs\n  calleval start --agent maya --yes    # no questions, defaults\n  calleval start --agent maya --voice --runs 1", cmd_start)
+    x.add_argument("--agent", metavar="NAME"); x.add_argument("--version", metavar="vN"); x.add_argument("--cases", help="id,id (default: a quick, relevant set)")
+    x.add_argument("--runs", type=int, default=1, help="conversations per case (default 1; 3 separates real issues from flukes)")
+    x.add_argument("--voice", action="store_true", help="real audio calls instead of text (needs `calleval setup --install voice`)")
+    x.add_argument("--judge", choices=["llm", "claude"], default="llm", help="llm: automatic (default); claude: prepare for Claude Code to judge")
+    x.add_argument("--gen", action="store_true", help="also write extra cases from the prompt"); x.add_argument("--no-open", action="store_true", help="do not open the browser")
+    x.add_argument("--yes", action="store_true", help="no questions: use defaults"); x.add_argument("--run-id", dest="run_id", metavar="ID")
+    x = cmd("demo", "See what a report looks like: replays a real recorded voice run (no keys, no setup).", "  calleval demo", cmd_demo)
     x = cmd("doctor", "Check what works and what is missing for text runs and voice runs.", "  calleval doctor\n  calleval doctor --json", cmd_doctor)
     x.add_argument("--json", action="store_true")
     x = cmd("setup", "Choose a stack and write calleval.json; optionally install the voice pieces (about 600 MB).",
             "  calleval setup --preset local            # no keys, runs on this machine\n  calleval setup --preset free-keys        # Gemini + Groq free tiers (keys in .env)\n  calleval setup --install voice", cmd_setup)
-    x.add_argument("--preset", choices=["local", "free-keys"]); x.add_argument("--llm-model", default="qwen2.5:3b", help="model name for the local preset")
+    x.add_argument("--preset", choices=["local", "free-keys", "openai", "cerebras"]); x.add_argument("--llm-model", default="qwen2.5:3b", help="model name for the local preset")
     x.add_argument("--install", choices=["voice"]); x.add_argument("--yes", action="store_true", help="answer yes to install prompts")
     x = cmd("judge", "Prepare each conversation of a run for judging (judge_input.md); Claude Code writes verdict.json, or use --llm.", "  calleval judge first\n  calleval judge first --llm", cmd_judge)
     x.add_argument("run_id"); x.add_argument("--llm", action="store_true", help="use judge_llm instead of Claude Code")

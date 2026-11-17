@@ -1,0 +1,105 @@
+{
+ "latency_s": [
+  3.9,
+  1.56,
+  2.86,
+  1.81,
+  3.49
+ ],
+ "talk_over_s": 0,
+ "flags": [
+  {
+   "type": "slow_response",
+   "t": 11.27,
+   "detail": "3.9s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 54.92,
+   "detail": "3.49s from end of caller speech to agent speech"
+  }
+ ],
+ "stt_mismatches": [
+  {
+   "speaker": "customer",
+   "turn": 1,
+   "said": "I would like to book an appointment for tomorrow at ten in the morning.",
+   "heard": "I would like to book an appointment for tomorrow at 10 in the morning.",
+   "word_swaps": [
+    [
+     "ten",
+     "10"
+    ]
+   ]
+  },
+  {
+   "speaker": "customer",
+   "turn": 5,
+   "said": "Induriniger works.",
+   "heard": "Enduring Iger works.",
+   "word_swaps": [
+    [
+     "induriniger",
+     "enduring"
+    ]
+   ]
+  },
+  {
+   "speaker": "customer",
+   "turn": 7,
+   "said": "Neha Kapoor.",
+   "heard": "Ne Kippur.",
+   "word_swaps": [
+    [
+     "neha",
+     "ne"
+    ],
+    [
+     "kapoor",
+     "kippur"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 2,
+   "said": "We have Dr. Prasad for General Medicine and Dr. Syed for Pediatrics. Whom would you like t",
+   "heard": "We have Dr. Prasad for general medicine and Dr. Sid for pediatrics, whom would you like to",
+   "word_swaps": [
+    [
+     "syed",
+     "sid"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 4,
+   "said": "We have branches in Indiranagar and Koramangala. Which one works for you?",
+   "heard": "We have branches in Induriniger and Kormungala. Which one works for you?",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "induriniger"
+    ],
+    [
+     "koramangala",
+     "kormungala"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 8,
+   "said": "I have 10 AM tomorrow at Indiranagar with Dr. Rajendra Prasad. Shall I lock it in?",
+   "heard": "I have 10 a.m. tomorrow at Endurinagar with Dr. Rajendra Prasad, shall I lock it in?",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "endurinagar"
+    ]
+   ]
+  }
+ ],
+ "spoken_forms": "Hi, this is Maya from Apollo Hospitals. How can I help you? We have doctor Prasad for general medicine and doctor Sid for pediatrics. Whom would you like to see? We have branches in Indiranagar and Kormanagala. Which one works for you? Could you please confirm your full name for the booking? I have ten a.m. tomorrow at Indiranagar with doctor Rajendra Prasad. Shall I lock it in? Your appointment is successfully booked. Is there anything else I can help with?"
+}

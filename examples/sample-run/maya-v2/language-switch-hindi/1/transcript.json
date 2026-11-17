@@ -1,0 +1,512 @@
+{
+ "agent": "maya",
+ "version": "v2",
+ "run": 1,
+ "case": {
+  "id": "language-switch-hindi",
+  "title": "Customer switches from English to Hindi mid-call",
+  "source": "calleval: language switching (not covered by ElevenLabs guide, which treats languages as platform-level)",
+  "persona": "Sunita, 55, more comfortable in Hindi",
+  "goal": "Book an appointment for tomorrow at 10 AM, any doctor",
+  "quirks": [
+   "Start in English. From your second reply onward speak only Hindi (Devanagari or Hinglish), e.g. 'haan, kal subah dus baje chahiye'"
+  ],
+  "precondition": "Customer spoke Hindi/Hinglish in at least two consecutive turns.",
+  "criteria": [
+   "After the customer switched to Hindi, the agent replied in Hindi/Hinglish rather than staying in English",
+   "The agent kept the context (did not restart the booking flow or re-ask answered questions)",
+   "The booking details (date, time) stayed correct across the language switch"
+  ],
+  "checks": [
+   {
+    "tool": "book_appointment",
+    "called": true,
+    "args": {
+     "start_time": "^2026-11-18 10:00:00$"
+    }
+   }
+  ],
+  "split": "train",
+  "_file": "cases/universal/core.json"
+ },
+ "mode": "voice",
+ "turns": [
+  {
+   "i": 0,
+   "role": "agent",
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?",
+   "t": 1.89,
+   "interrupted": false
+  },
+  {
+   "i": 1,
+   "role": "customer",
+   "text": "Hello, I want to book an appointment for tomorrow at ten AM with any doctor.",
+   "t": 6.57,
+   "interrupted": false
+  },
+  {
+   "i": 2,
+   "role": "agent",
+   "text": "We have Dr. Rajendra Prasad for General Medicine and Dr. Akram Syed for Pediatrics. Whom would you like to see?",
+   "t": 20.04,
+   "interrupted": false,
+   "tools": [
+    "lookup_caller",
+    "check_availability"
+   ]
+  },
+  {
+   "i": 3,
+   "role": "customer",
+   "text": "haan, koi bhi chalega, bas kal subah dus baje ka time chahiye.",
+   "t": 29.98,
+   "interrupted": false
+  },
+  {
+   "i": 4,
+   "role": "agent",
+   "text": "Could you please confirm your full name for the booking?",
+   "t": 39.49,
+   "interrupted": false,
+   "tools": [
+    "check_availability"
+   ]
+  },
+  {
+   "i": 5,
+   "role": "customer",
+   "text": "mera naam Sunita hai.",
+   "t": 44.82,
+   "interrupted": false
+  },
+  {
+   "i": 6,
+   "role": "agent",
+   "text": "I have ten in the morning tomorrow at Koramangala with Dr. Akram Syed. Shall I lock it in?",
+   "t": 49.54,
+   "interrupted": false,
+   "tools": [
+    "book_appointment"
+   ]
+  },
+  {
+   "i": 7,
+   "role": "customer",
+   "text": "haan, theek hai, wohi book kar do.",
+   "t": 57.18,
+   "interrupted": false
+  },
+  {
+   "i": 8,
+   "role": "agent",
+   "text": "Your appointment is confirmed for tomorrow at ten in the morning at Koramangala with Dr. Akram Syed. Is there anything else I can help with?",
+   "t": 61.73,
+   "interrupted": false
+  },
+  {
+   "i": 9,
+   "role": "customer",
+   "text": "bas itna hi chahiye tha, shukriya. bye.",
+   "t": 72.09,
+   "interrupted": false
+  },
+  {
+   "i": 10,
+   "role": "agent",
+   "text": "Thank you for calling Apollo Clinic. Have a wonderful day!",
+   "t": 77.6,
+   "interrupted": false
+  },
+  {
+   "i": 11,
+   "role": "customer",
+   "text": "akhri baar shukriya, bye.",
+   "t": 83.5,
+   "interrupted": false
+  },
+  {
+   "i": 12,
+   "role": "agent",
+   "text": "Thank you for calling Apollo Clinic. Have a wonderful day!",
+   "t": 87.8,
+   "interrupted": false
+  }
+ ],
+ "tool_calls": [
+  {
+   "turn": 2,
+   "name": "lookup_caller",
+   "args": {
+    "patient_phone": "9876543210"
+   },
+   "result": {
+    "status": "new_caller",
+    "name": null,
+    "names": [],
+    "doctor": null,
+    "branch": null,
+    "upcoming_appointments": [],
+    "dropped_call_context": null
+   },
+   "t": 16.16
+  },
+  {
+   "turn": 2,
+   "name": "check_availability",
+   "args": {
+    "patient_phone": "9876543210",
+    "time_preference": "10:00",
+    "date": "2026-11-18"
+   },
+   "result": {
+    "status": "available",
+    "slots": [
+     "10:00",
+     "10:30",
+     "11:00",
+     "14:00",
+     "15:00",
+     "16:00"
+    ],
+    "message": ""
+   },
+   "t": 20.02
+  },
+  {
+   "turn": 4,
+   "name": "check_availability",
+   "args": {
+    "practitioner_name": "Dr. Akram Syed",
+    "time_preference": "10:00",
+    "branch_name": "Koramangala",
+    "date": "2026-11-18",
+    "patient_phone": "9876543210"
+   },
+   "result": {
+    "status": "available",
+    "slots": [
+     "10:00",
+     "10:30",
+     "11:00",
+     "14:00",
+     "15:00",
+     "16:00"
+    ],
+    "message": ""
+   },
+   "t": 39.48
+  },
+  {
+   "turn": 6,
+   "name": "book_appointment",
+   "args": {
+    "patient_phone": "9876543210",
+    "branch_name": "Koramangala",
+    "start_time": "2026-11-18 10:00:00",
+    "practitioner_name": "Dr. Akram Syed",
+    "patient_name": "Sunita"
+   },
+   "result": {
+    "status": "success",
+    "message": "Appointment booked"
+   },
+   "t": 49.53
+  }
+ ],
+ "heard": [
+  {
+   "by": "customer",
+   "t": 6.54,
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?"
+  },
+  {
+   "by": "agent",
+   "t": 14.51,
+   "text": "Hello, I want to book an appointment for tomorrow at 10am with any doctor."
+  },
+  {
+   "by": "customer",
+   "t": 29.95,
+   "text": "We have Dr. Rajendra Prasad for General Medicine and Dr. Akram Sid for Pediatrics. Whom would you like to see?"
+  },
+  {
+   "by": "agent",
+   "t": 38.13,
+   "text": "Han, Koi Bai Chailga, Bas Kal Suba Dus Bej Kataim Chahiai."
+  },
+  {
+   "by": "customer",
+   "t": 44.79,
+   "text": "Could you please confirm your full name for the booking?"
+  },
+  {
+   "by": "agent",
+   "t": 48.24,
+   "text": "Mira Nam Sunita Hi"
+  },
+  {
+   "by": "customer",
+   "t": 57.16,
+   "text": "I have ten in the morning tomorrow at Coramingala with Dr. Akram Sid. Shall I lock it in?"
+  },
+  {
+   "by": "agent",
+   "t": 61.71,
+   "text": "Han, thik hai, wo hai buk kardu."
+  },
+  {
+   "by": "customer",
+   "t": 72.07,
+   "text": "Your appointment is confirmed for tomorrow at 10 in the morning at Kormankala with Dr. Akram Sid. Is there anything else I can help with?"
+  },
+  {
+   "by": "agent",
+   "t": 77.59,
+   "text": "Bas it nahai chahi aitha, shakriya bye."
+  },
+  {
+   "by": "customer",
+   "t": 83.37,
+   "text": "Thank you for calling Apollo Clinic. Have a wonderful day."
+  },
+  {
+   "by": "agent",
+   "t": 87.76,
+   "text": "Akribar Shukriya, bye!"
+  },
+  {
+   "by": "customer",
+   "t": 94.48,
+   "text": "Thank you for calling Apollo Clinic. Have a wonderful day."
+  }
+ ],
+ "ended": "room_closed",
+ "error": null,
+ "usage": {},
+ "t0": 1794834437.5765388,
+ "analysis": {
+  "latency_s": [
+   7.83,
+   3.34,
+   3.15,
+   2.1,
+   1.96,
+   2.84
+  ],
+  "talk_over_s": 0,
+  "flags": [
+   {
+    "type": "slow_response",
+    "t": 14.02,
+    "detail": "7.83s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 37.82,
+    "detail": "3.34s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 48.02,
+    "detail": "3.15s from end of caller speech to agent speech"
+   },
+   {
+    "type": "repeat",
+    "turn": 12,
+    "detail": "repeats an earlier agent sentence: Thank you for calling Apollo Clinic."
+   },
+   {
+    "type": "dead_air",
+    "t": 14.02,
+    "detail": "7.8s with nobody speaking"
+   }
+  ],
+  "stt_mismatches": [
+   {
+    "speaker": "customer",
+    "turn": 1,
+    "said": "Hello, I want to book an appointment for tomorrow at ten AM with any doctor.",
+    "heard": "Hello, I want to book an appointment for tomorrow at 10am with any doctor.",
+    "word_swaps": [
+     [
+      "ten",
+      "10am"
+     ]
+    ]
+   },
+   {
+    "speaker": "customer",
+    "turn": 3,
+    "said": "haan, koi bhi chalega, bas kal subah dus baje ka time chahiye.",
+    "heard": "Han, Koi Bai Chailga, Bas Kal Suba Dus Bej Kataim Chahiai.",
+    "word_swaps": [
+     [
+      "haan",
+      "han"
+     ],
+     [
+      "bhi",
+      "bai"
+     ],
+     [
+      "chalega",
+      "chailga"
+     ],
+     [
+      "subah",
+      "suba"
+     ],
+     [
+      "baje",
+      "bej"
+     ],
+     [
+      "ka",
+      "kataim"
+     ]
+    ]
+   },
+   {
+    "speaker": "customer",
+    "turn": 5,
+    "said": "mera naam Sunita hai.",
+    "heard": "Mira Nam Sunita Hi",
+    "word_swaps": [
+     [
+      "mera",
+      "mira"
+     ],
+     [
+      "naam",
+      "nam"
+     ],
+     [
+      "hai",
+      "hi"
+     ]
+    ]
+   },
+   {
+    "speaker": "customer",
+    "turn": 7,
+    "said": "haan, theek hai, wohi book kar do.",
+    "heard": "Han, thik hai, wo hai buk kardu.",
+    "word_swaps": [
+     [
+      "haan",
+      "han"
+     ],
+     [
+      "theek",
+      "thik"
+     ],
+     [
+      "wohi",
+      "wo"
+     ],
+     [
+      "book",
+      "hai"
+     ],
+     [
+      "kar",
+      "buk"
+     ],
+     [
+      "do",
+      "kardu"
+     ]
+    ]
+   },
+   {
+    "speaker": "customer",
+    "turn": 9,
+    "said": "bas itna hi chahiye tha, shukriya. bye.",
+    "heard": "Bas it nahai chahi aitha, shakriya bye.",
+    "word_swaps": [
+     [
+      "itna",
+      "it"
+     ],
+     [
+      "hi",
+      "nahai"
+     ],
+     [
+      "chahiye",
+      "chahi"
+     ],
+     [
+      "tha",
+      "aitha"
+     ],
+     [
+      "shukriya",
+      "shakriya"
+     ]
+    ]
+   },
+   {
+    "speaker": "customer",
+    "turn": 11,
+    "said": "akhri baar shukriya, bye.",
+    "heard": "Akribar Shukriya, bye!",
+    "word_swaps": [
+     [
+      "akhri",
+      "akribar"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 2,
+    "said": "We have Dr. Rajendra Prasad for General Medicine and Dr. Akram Syed for Pediatrics. Whom w",
+    "heard": "We have Dr. Rajendra Prasad for General Medicine and Dr. Akram Sid for Pediatrics. Whom wo",
+    "word_swaps": [
+     [
+      "syed",
+      "sid"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 6,
+    "said": "I have ten in the morning tomorrow at Koramangala with Dr. Akram Syed. Shall I lock it in?",
+    "heard": "I have ten in the morning tomorrow at Coramingala with Dr. Akram Sid. Shall I lock it in?",
+    "word_swaps": [
+     [
+      "koramangala",
+      "coramingala"
+     ],
+     [
+      "syed",
+      "sid"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 8,
+    "said": "Your appointment is confirmed for tomorrow at ten in the morning at Koramangala with Dr. A",
+    "heard": "Your appointment is confirmed for tomorrow at 10 in the morning at Kormankala with Dr. Akr",
+    "word_swaps": [
+     [
+      "ten",
+      "10"
+     ],
+     [
+      "koramangala",
+      "kormankala"
+     ],
+     [
+      "syed",
+      "sid"
+     ]
+    ]
+   }
+  ]
+ }
+}

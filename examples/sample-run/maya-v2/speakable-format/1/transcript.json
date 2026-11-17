@@ -1,0 +1,343 @@
+{
+ "agent": "maya",
+ "version": "v2",
+ "run": 1,
+ "case": {
+  "id": "speakable-format",
+  "title": "Agent speaks times and dates naturally, not as raw machine formats",
+  "source": "ElevenLabs prompting guide (elevenlabs.io/docs/eleven-agents/best-practices/prompting-guide) ('digits and symbols ... more likely to cause incorrect pronunciations'; spell out for TTS)",
+  "persona": "Arjun, relaxed",
+  "goal": "Book an appointment tomorrow at 10 AM, any doctor",
+  "quirks": [
+   "Ask the agent to repeat the final appointment details once"
+  ],
+  "precondition": "Customer asked the agent to repeat the final appointment details.",
+  "criteria": [
+   "The agent said times in a natural spoken form (like 'ten AM') and never read out machine formats like ISO dates or HH:MM:SS"
+  ],
+  "checks": [
+   {
+    "agent_text_must_not_match": "\\d{4}-\\d{2}-\\d{2}|\\d{2}:\\d{2}:\\d{2}"
+   }
+  ],
+  "split": "train",
+  "_file": "cases/universal/core.json"
+ },
+ "mode": "voice",
+ "turns": [
+  {
+   "i": 0,
+   "role": "agent",
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?",
+   "t": 2.32,
+   "interrupted": false
+  },
+  {
+   "i": 1,
+   "role": "customer",
+   "text": "Hey Maya, I need to book an appointment for tomorrow at ten in the morning with any available doctor.",
+   "t": 6.95,
+   "interrupted": false
+  },
+  {
+   "i": 2,
+   "role": "agent",
+   "text": "We have Dr. Prasad for General Medicine and Dr. Syed for Pediatrics. Whom would you like to see?",
+   "t": 16.89,
+   "interrupted": false,
+   "tools": [
+    "lookup_caller",
+    "check_availability"
+   ]
+  },
+  {
+   "i": 3,
+   "role": "customer",
+   "text": "Either one is totally fine with me.",
+   "t": 25.95,
+   "interrupted": false
+  },
+  {
+   "i": 4,
+   "role": "agent",
+   "text": "Could you confirm your full name for the booking?",
+   "t": 31.24,
+   "interrupted": false,
+   "tools": [
+    "check_availability"
+   ]
+  },
+  {
+   "i": 5,
+   "role": "customer",
+   "text": "Sure, my name is Arjun.",
+   "t": 35.81,
+   "interrupted": false
+  },
+  {
+   "i": 6,
+   "role": "agent",
+   "text": "I have 10 AM tomorrow at Indiranagar with Dr. Rajendra Prasad. Shall I lock it in?",
+   "t": 39.76,
+   "interrupted": false
+  },
+  {
+   "i": 7,
+   "role": "customer",
+   "text": "Yes, please lock that in. Could you repeat the final appointment details for me?",
+   "t": 47.48,
+   "interrupted": false
+  },
+  {
+   "i": 8,
+   "role": "agent",
+   "text": "You're booked for 10 AM tomorrow at Indiranagar with Dr. Rajendra Prasad. Is there anything else I can help with?",
+   "t": 55.19,
+   "interrupted": false,
+   "tools": [
+    "book_appointment"
+   ]
+  },
+  {
+   "i": 9,
+   "role": "customer",
+   "text": "That's everything, thanks so much. Bye!",
+   "t": 63.7,
+   "interrupted": false
+  },
+  {
+   "i": 10,
+   "role": "agent",
+   "text": "Thank you for calling Apollo Clinic. Have a wonderful day!",
+   "t": 68.07,
+   "interrupted": false
+  }
+ ],
+ "tool_calls": [
+  {
+   "turn": 2,
+   "name": "lookup_caller",
+   "args": {
+    "patient_phone": "9876543210"
+   },
+   "result": {
+    "status": "new_caller",
+    "name": null,
+    "names": [],
+    "doctor": null,
+    "branch": null,
+    "upcoming_appointments": [],
+    "dropped_call_context": null
+   },
+   "t": 15.55
+  },
+  {
+   "turn": 2,
+   "name": "check_availability",
+   "args": {
+    "patient_phone": "9876543210",
+    "time_preference": "10:00",
+    "date": "2026-11-18"
+   },
+   "result": {
+    "status": "available",
+    "slots": [
+     "10:00",
+     "10:30",
+     "11:00",
+     "14:00",
+     "15:00",
+     "16:00"
+    ],
+    "message": ""
+   },
+   "t": 16.87
+  },
+  {
+   "turn": 4,
+   "name": "check_availability",
+   "args": {
+    "date": "2026-11-18",
+    "time_preference": "10:00",
+    "patient_phone": "9876543210",
+    "branch_name": "Indiranagar",
+    "practitioner_name": "Dr. Rajendra Prasad"
+   },
+   "result": {
+    "status": "available",
+    "slots": [
+     "10:00",
+     "10:30",
+     "11:00",
+     "14:00",
+     "15:00",
+     "16:00"
+    ],
+    "message": ""
+   },
+   "t": 31.23
+  },
+  {
+   "turn": 8,
+   "name": "book_appointment",
+   "args": {
+    "patient_name": "Origen",
+    "practitioner_name": "Dr. Rajendra Prasad",
+    "start_time": "2026-11-18 10:00:00",
+    "patient_phone": "9876543210",
+    "branch_name": "Indiranagar"
+   },
+   "result": {
+    "status": "success",
+    "message": "Appointment booked"
+   },
+   "t": 55.17
+  }
+ ],
+ "heard": [
+  {
+   "by": "customer",
+   "t": 6.89,
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?"
+  },
+  {
+   "by": "agent",
+   "t": 14.17,
+   "text": "Hey Maya, I need to book an appointment for tomorrow at 10 in the morning with any available doctor."
+  },
+  {
+   "by": "customer",
+   "t": 25.94,
+   "text": "We have Dr. Prasad for general medicine and Dr. Sid for pediatrics. Whom would you like to see?"
+  },
+  {
+   "by": "agent",
+   "t": 29.84,
+   "text": "Either one is totally fine with me."
+  },
+  {
+   "by": "customer",
+   "t": 35.79,
+   "text": "Could you confirm your full name for the booking?"
+  },
+  {
+   "by": "agent",
+   "t": 39.75,
+   "text": "Sure, my name is Origen."
+  },
+  {
+   "by": "customer",
+   "t": 47.47,
+   "text": "I have 10 a.m. tomorrow at Ndurinagar with Dr. Rajendra Prasad, shall I lock it in?"
+  },
+  {
+   "by": "agent",
+   "t": 53.87,
+   "text": "Yes, please lock that in. Could you repeat the final appointment details for me?"
+  },
+  {
+   "by": "customer",
+   "t": 63.69,
+   "text": "You're booked for 10 a.m. tomorrow at Enduronigar with Dr. Rajendra Prasad. Is there anything else I can help with?"
+  },
+  {
+   "by": "agent",
+   "t": 68.06,
+   "text": "That's everything. Thanks so much. Bye."
+  },
+  {
+   "by": "customer",
+   "t": 73.4,
+   "text": "Thank you for calling Apollo Clinic. Have a wonderful day."
+  }
+ ],
+ "ended": "room_closed",
+ "error": null,
+ "usage": {},
+ "t0": 1794834977.7856023,
+ "analysis": {
+  "latency_s": [
+   5.1,
+   3.19,
+   1.92,
+   2.92,
+   1.59
+  ],
+  "talk_over_s": 0,
+  "flags": [
+   {
+    "type": "slow_response",
+    "t": 13.78,
+    "detail": "5.1s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 29.63,
+    "detail": "3.19s from end of caller speech to agent speech"
+   }
+  ],
+  "stt_mismatches": [
+   {
+    "speaker": "customer",
+    "turn": 1,
+    "said": "Hey Maya, I need to book an appointment for tomorrow at ten in the morning with any availa",
+    "heard": "Hey Maya, I need to book an appointment for tomorrow at 10 in the morning with any availab",
+    "word_swaps": [
+     [
+      "ten",
+      "10"
+     ]
+    ]
+   },
+   {
+    "speaker": "customer",
+    "turn": 5,
+    "said": "Sure, my name is Arjun.",
+    "heard": "Sure, my name is Origen.",
+    "word_swaps": [
+     [
+      "arjun",
+      "origen"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 2,
+    "said": "We have Dr. Prasad for General Medicine and Dr. Syed for Pediatrics. Whom would you like t",
+    "heard": "We have Dr. Prasad for general medicine and Dr. Sid for pediatrics. Whom would you like to",
+    "word_swaps": [
+     [
+      "syed",
+      "sid"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 6,
+    "said": "I have 10 AM tomorrow at Indiranagar with Dr. Rajendra Prasad. Shall I lock it in?",
+    "heard": "I have 10 a.m. tomorrow at Ndurinagar with Dr. Rajendra Prasad, shall I lock it in?",
+    "word_swaps": [
+     [
+      "indiranagar",
+      "ndurinagar"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 8,
+    "said": "You're booked for 10 AM tomorrow at Indiranagar with Dr. Rajendra Prasad. Is there anythin",
+    "heard": "You're booked for 10 a.m. tomorrow at Enduronigar with Dr. Rajendra Prasad. Is there anyth",
+    "word_swaps": [
+     [
+      "indiranagar",
+      "enduronigar"
+     ]
+    ]
+   }
+  ],
+  "spoken_forms": "Hey Maya, I need to book an appointment for tomorrow at ten in the morning with any available doctor.  Either one is totally fine with me.  Sure, my name is Argin.  Yes, please lock that in. Could you repeat the final appointment details for me? That's everything. Thanks so much. Bye."
+ }
+}

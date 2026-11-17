@@ -1,0 +1,402 @@
+{
+ "agent": "maya",
+ "version": "v2",
+ "run": 1,
+ "case": {
+  "id": "relative-date-resolution",
+  "title": "'Tomorrow' resolves to the correct calendar date in the tool call",
+  "source": "calleval: relative dates + ElevenLabs prompting guide (elevenlabs.io/docs/eleven-agents/best-practices/prompting-guide) (state tool parameter formats)",
+  "persona": "Meera, brisk",
+  "goal": "Book an appointment for tomorrow at 10 AM, any doctor and branch",
+  "quirks": [
+   "Always say 'tomorrow', never a date"
+  ],
+  "precondition": "Customer only used the word 'tomorrow' for the date.",
+  "criteria": [
+   "The agent booked the correct calendar date for 'tomorrow' (the call's current date plus one day)"
+  ],
+  "checks": [
+   {
+    "tool": "book_appointment",
+    "called": true,
+    "args": {
+     "start_time": "^2026-11-18 10:00:00$"
+    }
+   }
+  ],
+  "split": "train",
+  "_file": "cases/universal/core.json"
+ },
+ "mode": "voice",
+ "turns": [
+  {
+   "i": 0,
+   "role": "agent",
+   "text": "Hi, this is Maya from Apollo Hospitals. How can I help you?",
+   "t": 3.19,
+   "interrupted": false
+  },
+  {
+   "i": 1,
+   "role": "customer",
+   "text": "I want to book an appointment for tomorrow at ten in the morning.",
+   "t": 7.77,
+   "interrupted": false
+  },
+  {
+   "i": 2,
+   "role": "agent",
+   "text": "We have Dr. Rajendra Prasad for General Medicine and Dr. Akram Syed for Pediatrics. Whom would you like to see?",
+   "t": 14.22,
+   "interrupted": false,
+   "tools": [
+    "lookup_caller"
+   ]
+  },
+  {
+   "i": 3,
+   "role": "customer",
+   "text": "I don't mind, either doctor is fine.",
+   "t": 24.26,
+   "interrupted": false
+  },
+  {
+   "i": 4,
+   "role": "agent",
+   "text": "We have slots available at 10:00 AM with Dr. Rajendra Prasad at Indiranagar, or at 10:00 AM with Dr. Akram Syed at Koramangala. Which branch would you prefer?",
+   "t": 29.86,
+   "interrupted": false,
+   "tools": [
+    "check_availability"
+   ]
+  },
+  {
+   "i": 5,
+   "role": "customer",
+   "text": "Any branch is fine, whichever has the opening.",
+   "t": 45.24,
+   "interrupted": false
+  },
+  {
+   "i": 6,
+   "role": "agent",
+   "text": "Could you confirm your full name for the booking?",
+   "t": 51.13,
+   "interrupted": false,
+   "tools": [
+    "check_availability"
+   ]
+  },
+  {
+   "i": 7,
+   "role": "customer",
+   "text": "My name is Meera.",
+   "t": 56.1,
+   "interrupted": false
+  },
+  {
+   "i": 8,
+   "role": "agent",
+   "text": "I have booked your appointment for tomorrow at 10:00 AM at Indiranagar with Dr. Rajendra Prasad. Is there anything else I can help with?",
+   "t": 60.2,
+   "interrupted": false,
+   "tools": [
+    "book_appointment"
+   ]
+  },
+  {
+   "i": 9,
+   "role": "customer",
+   "text": "No, that is all. Thanks, bye.",
+   "t": 70.87,
+   "interrupted": false
+  },
+  {
+   "i": 10,
+   "role": "agent",
+   "text": "Thank you for calling Apollo Clinic. Have a wonderful day!",
+   "t": 74.97,
+   "interrupted": false
+  },
+  {
+   "i": 11,
+   "role": "customer",
+   "text": "Goodbye.",
+   "t": 80.11,
+   "interrupted": false
+  },
+  {
+   "i": 12,
+   "role": "agent",
+   "text": "Goodbye!",
+   "t": 84.05,
+   "interrupted": false
+  }
+ ],
+ "tool_calls": [
+  {
+   "turn": 2,
+   "name": "lookup_caller",
+   "args": {
+    "patient_phone": "9876543210"
+   },
+   "result": {
+    "status": "new_caller",
+    "name": null,
+    "names": [],
+    "doctor": null,
+    "branch": null,
+    "upcoming_appointments": [],
+    "dropped_call_context": null
+   },
+   "t": 14.21
+  },
+  {
+   "turn": 4,
+   "name": "check_availability",
+   "args": {
+    "time_preference": "10:00",
+    "date": "2026-11-18",
+    "patient_phone": "9876543210"
+   },
+   "result": {
+    "status": "available",
+    "slots": [
+     "10:00",
+     "10:30",
+     "11:00",
+     "14:00",
+     "15:00",
+     "16:00"
+    ],
+    "message": ""
+   },
+   "t": 29.84
+  },
+  {
+   "turn": 6,
+   "name": "check_availability",
+   "args": {
+    "time_preference": "10:00",
+    "practitioner_name": "Dr. Rajendra Prasad",
+    "date": "2026-11-18",
+    "patient_phone": "9876543210",
+    "branch_name": "Indiranagar"
+   },
+   "result": {
+    "status": "available",
+    "slots": [
+     "10:00",
+     "10:30",
+     "11:00",
+     "14:00",
+     "15:00",
+     "16:00"
+    ],
+    "message": ""
+   },
+   "t": 51.13
+  },
+  {
+   "turn": 8,
+   "name": "book_appointment",
+   "args": {
+    "start_time": "2026-11-18 10:00:00",
+    "branch_name": "Indiranagar",
+    "practitioner_name": "Dr. Rajendra Prasad",
+    "patient_name": "Mira",
+    "patient_phone": "9876543210"
+   },
+   "result": {
+    "status": "success",
+    "message": "Appointment booked"
+   },
+   "t": 60.19
+  }
+ ],
+ "heard": [
+  {
+   "by": "customer",
+   "t": 7.71,
+   "text": "Hi, this is Maya from Apollo Hospitals, how can I help you?"
+  },
+  {
+   "by": "agent",
+   "t": 12.7,
+   "text": "I want to book an appointment for tomorrow at 10 in the morning."
+  },
+  {
+   "by": "customer",
+   "t": 24.24,
+   "text": "We have Dr. Rajendra Prasad for General Medicine and Dr. Akram Sid for Pediatrics. Whom would you like to see?"
+  },
+  {
+   "by": "agent",
+   "t": 28.55,
+   "text": "I don't mind, either doctor is fine."
+  },
+  {
+   "by": "customer",
+   "t": 45.24,
+   "text": "We have slots available at 10.00 a.m. with Dr. Rogender Prasad at Indurinagar, or at 10.00 a.m. with Dr. Akram Sid at Koromangala. Which branch would you prefer?"
+  },
+  {
+   "by": "agent",
+   "t": 49.9,
+   "text": "Any branch is fine, whichever has the opening."
+  },
+  {
+   "by": "customer",
+   "t": 56.09,
+   "text": "Could you confirm your full name for the booking?"
+  },
+  {
+   "by": "agent",
+   "t": 58.85,
+   "text": "My name is Mira."
+  },
+  {
+   "by": "customer",
+   "t": 70.86,
+   "text": "I have booked your appointment for tomorrow at 10.00 a.m. at Indurnagar with Dr. Rajendra Prasad. Is there anything else I can help with?"
+  },
+  {
+   "by": "agent",
+   "t": 74.96,
+   "text": "No, that is all. Thanks, bye."
+  },
+  {
+   "by": "customer",
+   "t": 80.1,
+   "text": "Thank you for calling Apollo Clinic. Have a wonderful day."
+  },
+  {
+   "by": "agent",
+   "t": 82.33,
+   "text": "Goodbye."
+  },
+  {
+   "by": "customer",
+   "t": 85.67,
+   "text": "Goodbye."
+  }
+ ],
+ "ended": "room_closed",
+ "error": null,
+ "usage": {},
+ "t0": 1794835293.8374946,
+ "analysis": {
+  "latency_s": [
+   3.97,
+   4.56,
+   3.23,
+   3.3,
+   1.58,
+   1.96
+  ],
+  "talk_over_s": 0,
+  "flags": [
+   {
+    "type": "slow_response",
+    "t": 12.33,
+    "detail": "3.97s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 28.32,
+    "detail": "4.56s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 49.67,
+    "detail": "3.23s from end of caller speech to agent speech"
+   },
+   {
+    "type": "slow_response",
+    "t": 58.62,
+    "detail": "3.3s from end of caller speech to agent speech"
+   },
+   {
+    "type": "no_reply_after_tool",
+    "turn": 6,
+    "detail": "check_availability ran but the agent gave no spoken reply before the caller's next turn"
+   }
+  ],
+  "stt_mismatches": [
+   {
+    "speaker": "customer",
+    "turn": 1,
+    "said": "I want to book an appointment for tomorrow at ten in the morning.",
+    "heard": "I want to book an appointment for tomorrow at 10 in the morning.",
+    "word_swaps": [
+     [
+      "ten",
+      "10"
+     ]
+    ]
+   },
+   {
+    "speaker": "customer",
+    "turn": 7,
+    "said": "My name is Meera.",
+    "heard": "My name is Mira.",
+    "word_swaps": [
+     [
+      "meera",
+      "mira"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 2,
+    "said": "We have Dr. Rajendra Prasad for General Medicine and Dr. Akram Syed for Pediatrics. Whom w",
+    "heard": "We have Dr. Rajendra Prasad for General Medicine and Dr. Akram Sid for Pediatrics. Whom wo",
+    "word_swaps": [
+     [
+      "syed",
+      "sid"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 4,
+    "said": "We have slots available at 10:00 AM with Dr. Rajendra Prasad at Indiranagar, or at 10:00 A",
+    "heard": "We have slots available at 10.00 a.m. with Dr. Rogender Prasad at Indurinagar, or at 10.00",
+    "word_swaps": [
+     [
+      "rajendra",
+      "rogender"
+     ],
+     [
+      "indiranagar",
+      "indurinagar"
+     ],
+     [
+      "syed",
+      "sid"
+     ],
+     [
+      "koramangala",
+      "koromangala"
+     ]
+    ]
+   },
+   {
+    "speaker": "agent",
+    "turn": 8,
+    "said": "I have booked your appointment for tomorrow at 10:00 AM at Indiranagar with Dr. Rajendra P",
+    "heard": "I have booked your appointment for tomorrow at 10.00 a.m. at Indurnagar with Dr. Rajendra ",
+    "word_swaps": [
+     [
+      "indiranagar",
+      "indurnagar"
+     ]
+    ]
+   }
+  ],
+  "spoken_forms": "I want to book an appointment for tomorrow at ten in the morning. I don't mind either doctor is fine. Any branch is fine, whichever has the opening. My name is Mira. No, that is all. Thanks. Bye. Goodbye."
+ },
+ "attempts": 1
+}

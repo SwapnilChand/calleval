@@ -1,0 +1,189 @@
+{
+ "latency_s": [
+  3.47,
+  1.63,
+  2.02,
+  5.16,
+  4.2,
+  7.46,
+  5.78,
+  1.98
+ ],
+ "talk_over_s": 0,
+ "flags": [
+  {
+   "type": "slow_response",
+   "t": 11.78,
+   "detail": "3.47s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 49.33,
+   "detail": "5.16s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 65.08,
+   "detail": "4.2s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 82.08,
+   "detail": "7.46s from end of caller speech to agent speech"
+  },
+  {
+   "type": "slow_response",
+   "t": 100.73,
+   "detail": "5.78s from end of caller speech to agent speech"
+  },
+  {
+   "type": "repeat",
+   "turn": 12,
+   "detail": "repeats an earlier agent sentence: I have 11:00 AM tomorrow at Indiranagar with Dr."
+  },
+  {
+   "type": "dead_air",
+   "t": 82.08,
+   "detail": "7.5s with nobody speaking"
+  }
+ ],
+ "stt_mismatches": [
+  {
+   "speaker": "customer",
+   "turn": 3,
+   "said": "Dr. Prasad please.",
+   "heard": "Doctor. Press up please.",
+   "word_swaps": [
+    [
+     "dr",
+     "doctor"
+    ],
+    [
+     "prasad",
+     "press"
+    ]
+   ]
+  },
+  {
+   "speaker": "customer",
+   "turn": 5,
+   "said": "Indiranagar.",
+   "heard": "In Doreneger",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "in"
+    ]
+   ]
+  },
+  {
+   "speaker": "customer",
+   "turn": 7,
+   "said": "Maybe ten, or eleven, whichever is better.",
+   "heard": "Maybe 10 or 11, whichever is better.",
+   "word_swaps": [
+    [
+     "ten",
+     "10"
+    ],
+    [
+     "eleven",
+     "11"
+    ]
+   ]
+  },
+  {
+   "speaker": "customer",
+   "turn": 11,
+   "said": "Actually, let's go with eleven AM.",
+   "heard": "Actually, let's go with 11am.",
+   "word_swaps": [
+    [
+     "eleven",
+     "11am"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 2,
+   "said": "We have Dr. Prasad for General Medicine and Dr. Syed for Pediatrics. Whom would you like t",
+   "heard": "We have Dr. Prasad for general medicine and Dr. Sid for pediatrics. Whom would you like to",
+   "word_swaps": [
+    [
+     "syed",
+     "sid"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 4,
+   "said": "Which branch would you prefer, Indiranagar or Koramangala?",
+   "heard": "Which branch would you prefer, Inderniger or Kormungala?",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "inderniger"
+    ],
+    [
+     "koramangala",
+     "kormungala"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 6,
+   "said": "Dr. Prasad is at Indiranagar on Wednesdays. Would you like to book for tomorrow, Wednesday",
+   "heard": "Dr. Prasad is at Endurinagar on Wednesdays. Would you like to book for tomorrow, Wednesday",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "endurinagar"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 10,
+   "said": "I have 10:00 AM tomorrow at Indiranagar with Dr. Rajendra Prasad for Deepak. Shall I lock ",
+   "heard": "I have 10.00 a.m. tomorrow at Indirnagar with Dr. Rajendra Prasid for Deepak, shall I lock",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "indirnagar"
+    ],
+    [
+     "prasad",
+     "prasid"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 12,
+   "said": "I have 11:00 AM tomorrow at Indiranagar with Dr. Rajendra Prasad for Deepak. Shall I lock ",
+   "heard": "I have 11.00 a.m. tomorrow at Indorenegar with Dr. Rajendra Prasad for Deepak. Shall I loc",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "indorenegar"
+    ]
+   ]
+  },
+  {
+   "speaker": "agent",
+   "turn": 14,
+   "said": "Your appointment is confirmed for tomorrow at 11:00 AM at Indiranagar with Dr. Rajendra Pr",
+   "heard": "Your appointment is confirmed for tomorrow at 11.00 a.m. at Indurinagar with Dr. Rajendra ",
+   "word_swaps": [
+    [
+     "indiranagar",
+     "indurinagar"
+    ]
+   ]
+  }
+ ],
+ "spoken_forms": "Hi, this is Maya from Apollo Hospitals. How can I help you? We have doctor Presed for general medicine and doctor Sid for pediatrics. Whom would you like to see? Which branch would you prefer, Indiranagar or Kormangala? Doctor Presed is at Indiranagar on Wednesdays. Would you like to book for tomorrow, Wednesday, November eighteenth? And what time works best for you? I have ten zero zero AM available. Could you confirm your full name for the booking? I have ten zero zero AM tomorrow at Indiranagar with doctor Rajender Presed for DPEC. Shall I lock it in? I have eleven zero zero AM tomorrow at Indiranagar with doctor Rajender Presed. Shall I lock it in? Your appointment is confirmed for tomorrow at eleven zero zero AM at Indiranagar with doctor Rajender Presed. Is there anything else I can help with? Thank you for calling Apollo Clinic. Have a wonderful day."
+}
