@@ -35,6 +35,9 @@ Say plainly: the twin is a rebuild of the prompt and tools on the chosen speech 
 Free quick probe, no audio: `./calleval.sh twin-debug --agent <a> --version vN`, then follow its printed `lk agent debugger` commands (needs the optional `lk` CLI in `.tools/`; text mode is free).
 Reading results: analysis.json flags are hints with timestamps (slow_response, talk_over, agent_cut_off, repeat, dead_air, no_reply_after_tool, STT mismatches, spoken_forms from a listening model when GEMINI_API_KEY is set). Quote them as evidence in verdicts only when the transcript agrees; do not treat a flag as a verdict.
 
+## 3c. Live run (the real hosted agent, optional)
+`./calleval.sh live-run --agent <a> --provider-agent-id <id> --cases <ids> --real-tools`: talks to the agent as deployed, over the platform's streaming socket (adapter in `calleval/live/`, first provider: Bolna), with local speech models and the same judge and report. Use it for a final, production-faithful check or real audio problems; use text and voice-twin runs for volume and forced failures. Before running: explain that the real agent's real tools run (a booking test can book) and the platform bills minutes; ask for a small budget (`--max-minutes`); prefer cases that do not change state. Tool calls are not visible in live runs and cases needing forced tool failures are skipped.
+
 ## 4. Judge (you are the judge; this uses the user's Claude subscription)
 `./calleval.sh judge <run_id>` writes `judge_input.md` beside every transcript. For each one: read it, write `verdict.json` in the same folder in the exact format it states. Hard rules:
 - Judge only from transcript and tool calls. Quote the exact words with their turn number (T<n>) for every criterion; no quote means pass:false.

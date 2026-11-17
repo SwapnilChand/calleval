@@ -11,7 +11,7 @@ def load_runs(run_dir):
         vp = tp.parent / "verdict.json"
         v = json.loads(vp.read_text()) if vp.exists() else None
         t["_dir"], t["verdict"] = tp.parent, v
-        t["checks"] = run_checks(t["case"].get("checks"), t["tool_calls"], t["turns"])
+        t["checks"] = [] if t.get("live") else run_checks(t["case"].get("checks"), t["tool_calls"], t["turns"])   # live: the real tools ran on the provider side
         t["status"] = run_status(t)
         runs.append(t)
     return runs

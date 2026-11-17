@@ -1,7 +1,7 @@
 import argparse, os, hashlib, json, shutil, sys, time
 from pathlib import Path
 from . import ui
-from .core import ROOT, Skip, date_vars, fill, load_agent, load_cases, load_config, load_env, versions
+from .core import ROOT, Skip, config_path, date_vars, fill, load_agent, load_cases, load_config, load_env, versions
 from .judge import judge_input_md, llm_judge
 from .report import load_runs, print_table, summarize, write_html
 from .sim import run_conversation
@@ -279,6 +279,75 @@ def cmd_start(a):
     run(a)
 
 
+def cmd_live(a):
+    """Talk to the REAL hosted agent over its streaming socket (no twin): real speech-to-text, voice, model and latency."""
+    import asyncio, importlib
+    for mod in ("aiohttp", "faster_whisper", "piper"):
+        try:
+            importlib.import_module(mod)
+        except ImportError:
+            raise UserError("live runs need the voice pieces", "run `calleval setup --install voice` first")
+    from .live import bolna
+    from .live.runner import Voice, converse, write_run
+    from .sim import PERSONA
+    cfg = load_config()
+    agent = agent_or_die(a.agent, a.version)
+    live = cfg.get("live", {}).get("agents", {}).get(agent["name"], {})
+    agent_id = a.provider_agent_id or live.get("agent_id")
+    if not agent_id:
+        raise UserError("no hosted agent is linked to this agent yet", f"calleval live-run --agent {agent['name']} --provider-agent-id <the agent's id on the provider>")
+    if a.provider_agent_id:                                   # remember it in your personal config
+        p = config_path()
+        cur = json.loads(p.read_text()) if p.exists() else {}
+        cur.setdefault("live", {}).setdefault("agents", {})[agent["name"]] = {"provider": "bolna", "agent_id": agent_id}
+        p.write_text(json.dumps(cur, indent=2) + "\n")
+    dv = date_vars(cfg["now"])
+    cvars = {**dv, **agent.get("case_vars", {})}
+    cases = []
+    for c in load_cases(a.cases, a.split, agent["name"]):
+        if c.get("mock_overrides"):
+            ui.line("-", "dim", f"{c['id']:34} skipped", "needs a forced tool failure; only possible in text and voice-twin runs")
+            continue
+        try:
+            cases.append(fill(c, cvars))
+        except Skip:
+            pass
+    if not cases:
+        raise UserError("no case can run live for this agent", "pick cases with --cases id,id")
+    n = len(cases) * a.runs
+    ui.header("calleval live-run", f"{agent['name']} (hosted agent {agent_id[:8]}…)", f"{n} call(s)", f"≤{a.max_minutes} min total")
+    print(ui.c("  This talks to your REAL agent: its real tools run (a booking test can create a real booking) and the provider bills minutes.", "yellow"))
+    if not a.real_tools and ui.ask("Go ahead with the real agent and its real tools?", [("y", "yes"), ("n", "no")], default="n") != "y":
+        raise UserError("not confirmed", "re-run with --real-tools to confirm, or use text / voice-run (fake backend)")
+    adp = bolna.Adapter(agent_id, host=live.get("host"))
+    before = adp.balance()
+    ui.step("loading local speech models (first time downloads about 150 MB)")
+    voice = Voice(cfg)
+    run_id = a.run_id or time.strftime("live-%m%d-%H%M")
+    base = ROOT / "runs" / run_id
+    start_all, done, errs = time.time(), 0, 0
+    for case in cases:
+        for k in range(1, a.runs + 1):
+            if (time.time() - start_all) / 60 > a.max_minutes:
+                ui.line("!", "yellow", "time budget reached; stopping (finished calls are kept)")
+                break
+            d = base / f"{agent['name']}-{agent['version']}" / case["id"] / str(k)
+            if (d / "transcript.json").exists():
+                continue
+            pvars = {"from_number": case.get("caller", cfg["from_number"])}
+            persona = PERSONA.format(persona=case["persona"], goal=case["goal"], phone=pvars["from_number"], quirks="; ".join(case.get("quirks", [])) or "none")
+            ui.step(f"calling the agent: {case['id']} #{k}")
+            t1 = time.time()
+            res = asyncio.run(converse(adp, voice, cfg, persona, cfg["turns"], 150))
+            rec = adp.find_execution(t1)
+            tr = write_run(d, res, rec, case, {"agent": agent["name"], "version": agent["version"], "run": k, "provider": "bolna"})
+            errs += show(case["id"], k, {"turns": tr["turns"], "tool_calls": [], "ended": tr["ended"], "error": None}, time.time() - t1)
+            done += 1
+    after = adp.balance()
+    print(ui.c(f"\n {done} call(s), {errs} with problems, {(time.time() - start_all) / 60:.1f} min" + (f", spent {before - after:.2f} wallet units" if before is not None and after is not None else ""), "bold"))
+    ui.hint(f"calleval judge {run_id} --llm   (then: calleval report {run_id})")
+
+
 def cmd_judge(a):
     cfg = load_config()
     base = run_dir_or_die(a.run_id)
@@ -389,6 +458,12 @@ def build_parser():
     x.add_argument("--judge", choices=["llm", "claude"], default="llm", help="llm: automatic (default); claude: prepare for Claude Code to judge")
     x.add_argument("--gen", action="store_true", help="also write extra cases from the prompt"); x.add_argument("--no-open", action="store_true", help="do not open the browser")
     x.add_argument("--yes", action="store_true", help="no questions: use defaults"); x.add_argument("--run-id", dest="run_id", metavar="ID")
+    x = cmd("live-run", "Talk to your REAL hosted agent over its streaming socket: real speech-to-text, voice, model and latency (needs the voice pieces; the provider bills minutes).",
+            "  calleval live-run --agent maya --provider-agent-id <id> --cases relative-date-resolution --real-tools", cmd_live)
+    x.add_argument("--agent", required=True, metavar="NAME"); x.add_argument("--version", metavar="vN"); x.add_argument("--cases", default="all"); x.add_argument("--split", default="all")
+    x.add_argument("--runs", type=int, default=1); x.add_argument("--provider-agent-id", metavar="ID", help="the agent's id on the provider (saved to your config)")
+    x.add_argument("--max-minutes", type=float, default=8, help="stop starting new calls after this many minutes (default 8)")
+    x.add_argument("--real-tools", action="store_true", help="confirm that the real agent's real tools will run"); x.add_argument("--run-id", dest="run_id", metavar="ID")
     x = cmd("demo", "See what a report looks like: replays a real recorded voice run (no keys, no setup).", "  calleval demo", cmd_demo)
     x = cmd("doctor", "Check what works and what is missing for text runs and voice runs.", "  calleval doctor\n  calleval doctor --json", cmd_doctor)
     x.add_argument("--json", action="store_true")

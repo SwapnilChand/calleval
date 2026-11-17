@@ -54,13 +54,26 @@ def voice_section(a):
     return "\n".join(L) + "\n\n"
 
 
+def platform_section(t):
+    pl = t.get("platform")
+    if not pl:
+        return ""
+    L = [f"## Provider record ({pl.get('provider')}): their own transcript of the same call, plus metrics. Tool calls are NOT visible in live runs; judge only from what was said.",
+         f"- cost: {pl.get('cost')}, duration: {pl.get('duration')}s"]
+    L += [f"- {x['role'].upper()}: {x['text'][:200]}" for x in pl.get("transcript", [])]
+    lat = pl.get("latency") or {}
+    if lat.get("time_to_first_audio") is not None:
+        L.append(f"- provider latency: time_to_first_audio={lat.get('time_to_first_audio')}; interruptions={lat.get('interruption_stats')}")
+    return "\n".join(L) + "\n\n"
+
+
 def judge_input_md(t):
     c = t["case"]
     tr, tl = render_transcript(t)
     crit = "\n".join(f"{i+1}. {x}" for i, x in enumerate(c["criteria"]))
     return (f"# Judge: {c['id']} (run {t['run']}) agent {t['agent']} {t['version']}\n\n"
             f"## Scenario precondition (did the CUSTOMER actually do this?)\n{c.get('precondition', 'n/a')}\n\n"
-            f"## Criteria (yes/no each)\n{crit}\n\n## Transcript\n{tr}\n\n## Tool calls\n{tl}\n\n{voice_section(t.get('analysis'))}## Output\n{VERDICT_FORMAT}\n")
+            f"## Criteria (yes/no each)\n{crit}\n\n## Transcript\n{tr}\n\n## Tool calls\n{tl if not t.get('live') else '(not visible in a live run)'}\n\n{platform_section(t)}{voice_section(t.get('analysis'))}## Output\n{VERDICT_FORMAT}\n")
 
 
 def llm_judge(cfg, t):
