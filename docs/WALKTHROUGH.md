@@ -189,5 +189,5 @@ How it works: your customer bot listens to the agent's audio (transcribed locall
 - Voice runs rebuild your agent as a "voice twin" (your prompt and tools) on the speech and language services you choose. Audio findings hold for **those** services, not necessarily your production stack.
 - Small local models follow long prompts and tools poorly; free hosted tiers are rate-limited. One run per case is a quick look; three separates real issues from flukes.
 - The LLM judge and the automatic voice flags are hints with evidence, not ground truth. Calibrate against your own listening.
-- `agents/maya/v3` is an example of what `calleval improve` produces. It is a **proposal, not a verified improvement**: a first same-model re-run on three comparable cases showed no difference from v2. `v2` is the baseline.
+- `agents/maya/v3` is an example of what `calleval improve` produces, and a useful warning: re-tested on 24 conversations per version it was **not better than v2** (same on 4 cases, worse on 1, Hindi still failing on both). Always re-run a proposed version before adopting it; `v2` is the baseline. Details in `agents/maya/v3/CHANGES.md`.
 - Piper (local voices) is GPL-3.0 and installed on demand, not bundled. The rest of calleval is MIT.
