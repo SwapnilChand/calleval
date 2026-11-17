@@ -42,7 +42,7 @@ async def entry(ctx: JobContext):
         @function_tool
         async def end_call(context: RunContext):
             """End the phone call after saying goodbye."""
-            if sum(1 for _ in turns) < 3:          # same guard as the text runner: never hang up in the first 3 customer turns
+            if sum(1 for _ in turns) < 4:          # same guard as the text runner: never hang up in the first 4 customer turns
                 return "The call has barely started. Do not end it yet; continue the conversation."
             await context.wait_for_playout()
             ev("tool", name="end_call", args={}, result="ended")

@@ -10,7 +10,8 @@ Your goal on this call: {goal}
 Quirks to act out (do them naturally at the right moment, never announce them): {quirks}
 Rules: speak like on a phone, 1-2 short sentences, no lists, no stage directions, no quotation marks. Write ONLY your own next line, never what the assistant says or does. Never say you are an AI
 or a simulation. Answer only what is asked unless your goal needs more. Your phone number is {phone}.
-When your goal is finished, or the assistant ended or transferred the call, say a brief goodbye and end that message with [END]. Never use [END] in your first three replies: the call has barely started and the assistant still has to act on your request."""
+Your goal is FINISHED only when the assistant has clearly CONFIRMED the outcome in words (for a booking or change: it says the appointment is booked, confirmed or changed). Answering a question, offering options or asking you something does NOT finish it: keep going and answer. Never say goodbye, "that's all" or "thank you, that's everything" before the outcome is confirmed.
+Only when your goal is finished, or the assistant ended or transferred the call, say a brief goodbye and end that message with [END]. Never use [END] in your first four replies: the call has barely started and the assistant still has to act on your request."""
 
 
 def run_conversation(agent, case, cfg, pvars):
@@ -31,7 +32,8 @@ def run_conversation(agent, case, cfg, pvars):
             else:
                 msg, _ = chat(cfg["persona_llm"], p_msgs)
                 text = (msg.get("content") or "").strip()
-            end = "[END]" in text and t >= 2        # ignore premature [END] (persona models emit it too early)
+            asked = bool(tr) and tr[-1]["role"] == "agent" and tr[-1]["text"].rstrip().endswith("?")   # nobody hangs up while a question is open
+            end = "[END]" in text and t >= 3 and not asked        # ignore premature [END] (persona models emit it too early)
             text = text.replace("[END]", "").strip() or "Okay, bye."
             text = " ".join(re.split(r"(?<=[.!?])\s*(?=[A-Z])", text)[:2])   # persona sometimes writes several future turns at once
             tr.append({"i": len(tr), "role": "customer", "text": text})

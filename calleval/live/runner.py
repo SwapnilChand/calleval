@@ -55,7 +55,8 @@ def persona_line(cfg, persona_system, turns, n_customer):
         {"role": "user" if x["role"] == "agent" else "assistant", "content": x["text"]} for x in turns]
     m, _ = chat(cfg["persona_llm"], msgs)
     text = (m.get("content") or "").strip().replace("\n", " ")
-    end = "[END]" in text and n_customer >= 2
+    asked = bool(turns) and turns[-1]["role"] == "agent" and turns[-1]["text"].rstrip().endswith("?")      # nobody hangs up while a question is open
+    end = "[END]" in text and n_customer >= 3 and not asked
     text = text.replace("[END]", "").strip()
     sents = re.split(r"(?<=[.?!])\s+", text)
     return " ".join(sents[:2]).strip() or "Okay.", end

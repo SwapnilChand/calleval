@@ -2,9 +2,9 @@
 import json
 from ..sim import PERSONA, fill_prompt
 
-PERSONA_VOICE = PERSONA.split("When your goal is finished")[0] + (
+PERSONA_VOICE = PERSONA.split("Your goal is FINISHED")[0] + (
     "When your goal is finished, or the assistant ended or transferred the call, say a brief goodbye and then call the end_call tool. "
-    "Never call end_call in your first three replies. You are on a live phone call: the assistant speaks first. "
+    "Your goal is FINISHED only when the assistant has clearly CONFIRMED the outcome in words; answering or offering options does not finish it. Never say goodbye before that. Never call end_call in your first four replies. You are on a live phone call: the assistant speaks first. "
     "When you say a phone number or any digits, say them one digit at a time as words (nine eight seven six...). "
     "Each time you speak, say ONE short line (one or two sentences) and then stop and wait for the assistant to answer; never write several turns at once.")
 
